@@ -2,7 +2,6 @@ import { useMemo, useState } from 'react'
 import { Link, useParams, useSearchParams } from 'react-router-dom'
 import { BookingCard } from '../components/booking/BookingCard'
 import { cars, getCarById } from '../data/cars'
-import { formatShortDate } from '../lib/dates'
 
 const fuelIcons: Record<string, string> = {
   Petrol: '⛽', Diesel: '🛢️', EV: '⚡', Hybrid: '🌿',
