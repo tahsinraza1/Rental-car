@@ -12,6 +12,8 @@ import scorpioClassicImg from '../assets/cars/scorpio-classic.jpg'
 import safariImg from '../assets/cars/safari.jpg'
 import tharRoxxImg from '../assets/cars/thar-roxx.jpg'
 import scorpioNImg from '../assets/cars/scorpio-n.jpg'
+import brezzaImg from '../assets/cars/brezza.jpg'
+import grandVitaraImg from '../assets/cars/grand-vitara.jpg'
 
 export const cars: Car[] = [
   // ── Budget Segment ─────────────────────────────────────
@@ -223,6 +225,40 @@ export const cars: Car[] = [
     description:
       'The Mahindra Scorpio N is a bold, body-on-frame SUV built for adventure. With a powerful diesel engine, 4WD option, and commanding stance, it dominates both city roads and rough terrain.',
     features: ['4WD with Low Range', 'Sony Sound System', 'Wireless Charging', 'Sunroof', '6 Airbags', 'Terrain Modes'],
+    bookedDates: [],
+  },
+  {
+    id: 'brezza',
+    name: 'Maruti Brezza',
+    city: 'Delhi',
+    pricePerDay: 2700,
+    images: [brezzaImg],
+    seats: 5,
+    transmission: 'Automatic',
+    fuel: 'Petrol',
+    year: 2024,
+    engineCC: '1462 cc',
+    mileage: '19.8 km/l',
+    description:
+      'The Maruti Brezza is a compact SUV with bold styling, advanced features, and a comfortable ride. Perfect for city and highway drives.',
+    features: ['Sunroof', 'Cruise Control', '6 Airbags', 'SmartPlay Pro+', 'ABS + EBD'],
+    bookedDates: [],
+  },
+  {
+    id: 'grand-vitara',
+    name: 'Maruti Grand Vitara',
+    city: 'Delhi',
+    pricePerDay: 3000,
+    images: [grandVitaraImg],
+    seats: 5,
+    transmission: 'Automatic',
+    fuel: 'Hybrid',
+    year: 2024,
+    engineCC: '1490 cc',
+    mileage: '27.97 km/l',
+    description:
+      'The Maruti Grand Vitara is a premium SUV with hybrid technology, luxurious interiors, and exceptional fuel efficiency. Ideal for long journeys.',
+    features: ['Panoramic Sunroof', '360° Camera', 'Wireless Charging', '6 Airbags', 'All-Wheel Drive'],
     bookedDates: [],
   },
 ]

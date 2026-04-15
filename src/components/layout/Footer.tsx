@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { OWNER_PHONE_E164, OWNER_WHATSAPP_NUMBER } from '../../config'
-import logoImg from '../../assets/logo.svg'
+import logoImg from '../../assets/logo.png'
 
 export function Footer() {
   return (
@@ -21,7 +21,7 @@ export function Footer() {
                 href={`https://wa.me/${OWNER_WHATSAPP_NUMBER}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="grid size-9 place-items-center rounded-xl border border-slate-700 bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 transition"
+                className="grid size-9 place-items-center rounded-xl border border-slate-700 bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-[#E1306C] transition"
                 aria-label="WhatsApp"
               >
                 <svg className="size-4" fill="currentColor" viewBox="0 0 24 24">
@@ -30,7 +30,7 @@ export function Footer() {
               </a>
               <a
                 href={`tel:${OWNER_PHONE_E164}`}
-                className="grid size-9 place-items-center rounded-xl border border-slate-700 bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 transition"
+                className="grid size-9 place-items-center rounded-xl border border-slate-700 bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white transition"
                 aria-label="Phone"
               >
                 <svg className="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -41,7 +41,7 @@ export function Footer() {
                 href="https://www.instagram.com/carrentalexpress?igsh=N3ZzcmJvb3ZheHRi"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="grid size-9 place-items-center rounded-xl border border-slate-700 bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 hover:text-[#E1306C] transition"
+                className="grid size-9 place-items-center rounded-xl border border-slate-700 bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-[#E1306C] transition"
                 aria-label="Instagram"
               >
                 <svg className="size-4" fill="currentColor" viewBox="0 0 24 24">

@@ -12,14 +12,14 @@ export function CarCard({ car }: { car: Car }) {
       className="group flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-orange-200"
     >
       {/* Image */}
-      <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">
+      <div className="relative aspect-16/10 overflow-hidden bg-slate-100">
         <img
           src={car.images[0]}
           alt={car.name}
           className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.05]"
           loading="lazy"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/10 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-slate-900/70 via-slate-900/10 to-transparent" />
 
         {/* Fuel badge */}
         <div className="absolute top-3 left-3">

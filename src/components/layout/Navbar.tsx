@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { OWNER_PHONE_E164 } from '../../config'
 import { cn } from '../../lib/cn'
-import logoImg from '../../assets/logo.svg'
+import logoImg from '../../assets/logo.png'
 
 export function Navbar() {
   const [open, setOpen] = useState(false)
@@ -37,7 +37,7 @@ export function Navbar() {
           </a>
           <NavLink
             to="/cars"
-            className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-orange-500 to-red-500 px-5 py-2 text-sm font-bold text-white shadow-lg shadow-orange-500/30 hover:opacity-90 transition"
+            className="inline-flex items-center gap-2 rounded-xl bg-linear-to-r from-orange-500 to-red-500 px-5 py-2 text-sm font-bold text-white shadow-lg shadow-orange-500/30 hover:opacity-90 transition"
           >
             Book a Car
           </NavLink>
@@ -83,7 +83,7 @@ export function Navbar() {
             <NavLink
               to="/cars"
               onClick={() => setOpen(false)}
-              className="flex items-center justify-center rounded-xl bg-gradient-to-r from-orange-500 to-red-500 px-4 py-3 text-sm font-bold text-white shadow-lg shadow-orange-500/25"
+              className="flex items-center justify-center rounded-xl bg-linear-to-r from-orange-500 to-red-500 px-4 py-3 text-sm font-bold text-white shadow-lg shadow-orange-500/25"
             >
               Book a Car
             </NavLink>
