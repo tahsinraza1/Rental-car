@@ -12,7 +12,7 @@ export function WhyChooseUs() {
     <section className="grid gap-8">
       <div className="text-center">
         <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-1.5 text-xs font-bold text-emerald-700 mb-3">
-          Why DriveEasy
+          Why Car Rental Express
         </div>
         <h2 className="text-2xl font-black text-slate-900 md:text-3xl">Built different, for the better</h2>
         <p className="mt-2 text-sm text-slate-500 max-w-lg mx-auto">

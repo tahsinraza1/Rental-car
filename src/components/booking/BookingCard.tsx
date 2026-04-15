@@ -433,12 +433,47 @@ function DateDisplay({ label, value, placeholder }: { label: string; value: stri
 }
 
 function TimeInput({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {
+  // Parse HH:mm (24h) into 12h parts
+  const [h24, m] = (value || '12:00').split(':').map(Number)
+  const isPM = h24 >= 12
+  const h12 = h24 === 0 ? 12 : h24 > 12 ? h24 - 12 : h24
+  const period = isPM ? 'PM' : 'AM'
+
+  function update(newH12: number, newMin: number, newPeriod: string) {
+    let h = newH12
+    if (newPeriod === 'AM') {
+      h = newH12 === 12 ? 0 : newH12
+    } else {
+      h = newH12 === 12 ? 12 : newH12 + 12
+    }
+    onChange(`${String(h).padStart(2, '0')}:${String(newMin).padStart(2, '0')}`)
+  }
+
+  const selectClass = "h-10 rounded-xl border border-slate-200 bg-slate-50 px-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-400/40 focus:border-orange-300 transition appearance-none cursor-pointer"
+
   return (
-    <label className="grid gap-1">
+    <div className="grid gap-1">
       <span className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">{label}</span>
-      <input type="time" value={value} onChange={(e) => onChange(e.target.value)}
-        className="h-10 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-400/40 focus:border-orange-300 transition" />
-    </label>
+      <div className="flex gap-1.5">
+        {/* Hour */}
+        <select value={h12} onChange={(e) => update(Number(e.target.value), m, period)} className={`${selectClass} flex-1`}>
+          {Array.from({ length: 12 }, (_, i) => i + 1).map((hr) => (
+            <option key={hr} value={hr}>{hr}</option>
+          ))}
+        </select>
+        {/* Minute */}
+        <select value={m} onChange={(e) => update(h12, Number(e.target.value), period)} className={`${selectClass} flex-1`}>
+          {[0, 15, 30, 45].map((min) => (
+            <option key={min} value={min}>{String(min).padStart(2, '0')}</option>
+          ))}
+        </select>
+        {/* AM/PM */}
+        <select value={period} onChange={(e) => update(h12, m, e.target.value)} className={`${selectClass} w-16`}>
+          <option value="AM">AM</option>
+          <option value="PM">PM</option>
+        </select>
+      </div>
+    </div>
   )
 }
 

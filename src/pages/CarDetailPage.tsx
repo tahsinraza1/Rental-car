@@ -178,30 +178,6 @@ export function CarDetailPage() {
               ))}
             </div>
           </div>
-
-          {/* Booked dates */}
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-            <div className="text-sm font-bold text-slate-900 mb-3">Booked dates</div>
-            {car.bookedDates.length === 0 ? (
-              <div className="flex items-center gap-2 text-sm text-emerald-600">
-                <svg className="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                </svg>
-                No bookings yet — all dates are available!
-              </div>
-            ) : (
-              <div className="flex flex-wrap gap-2">
-                {car.bookedDates.map((r, idx) => (
-                  <span key={idx} className="inline-flex items-center gap-1.5 rounded-xl border border-rose-200 bg-rose-50 px-3 py-1.5 text-xs font-semibold text-rose-600">
-                    <svg className="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                    {formatShortDate(r.start)} → {formatShortDate(r.end)}
-                  </span>
-                ))}
-              </div>
-            )}
-          </div>
         </div>
 
         {/* Right column: Booking */}

@@ -4,7 +4,7 @@ const testimonials = [
   { name: 'Arjun Mehta',  city: 'Delhi',  rating: 5, text: 'Rented the Innova Crysta for a family trip to Agra. Spotless car, fair price, and the owner was very responsive. Highly recommended!',          avatar: 'AM', color: 'from-emerald-500 to-teal-500',  featured: false },
   { name: 'Sneha Patel',  city: 'Noida',  rating: 5, text: 'The Tata Nexon EV was perfect for my city commute. Zero emissions, great range, and the booking process was effortless.',                       avatar: 'SP', color: 'from-pink-500 to-rose-500',    featured: false },
   { name: 'Vikram Singh', city: 'Delhi',  rating: 5, text: 'Transparent pricing, no hidden fees. The Scorpio-N handled the Delhi roads like a beast. Great experience overall.',                             avatar: 'VS', color: 'from-amber-500 to-orange-500',  featured: false },
-  { name: 'Ananya Reddy', city: 'Noida',  rating: 5, text: 'DriveEasy is the best car rental platform I have used. Direct owner contact means better deals and faster responses.',                           avatar: 'AR', color: 'from-violet-500 to-purple-500', featured: false },
+  { name: 'Ananya Reddy', city: 'Noida',  rating: 5, text: 'Car Rental Express is the best car rental platform I have used. Direct owner contact means better deals and faster responses.',                           avatar: 'AR', color: 'from-violet-500 to-purple-500', featured: false },
 ]
 
 function Stars({ count }: { count: number }) {

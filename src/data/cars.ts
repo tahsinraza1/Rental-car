@@ -1,44 +1,66 @@
 import type { Car } from '../types'
 
-import tharImg from '../assets/cars/thar.jpg'
-import scorpioImg from '../assets/cars/scorpio.jpg'
+import punchImg from '../assets/cars/punch.jpg'
+import glanzaImg from '../assets/cars/glanza.webp'
 import balenoImg from '../assets/cars/baleno.jpg'
-import dzireImg from '../assets/cars/dzire.jpg'
-import xuv700Img from '../assets/cars/xuv700.jpg'
-import cretaImg from '../assets/cars/creta.jpg'
-import vernaImg from '../assets/cars/verna.jpg'
+import fronxImg from '../assets/cars/fronx.jpg'
+import swiftImg from '../assets/cars/swift.jpg'
+import altrozImg from '../assets/cars/altroz.jpg'
+import tharImg from '../assets/cars/thar.jpg'
+import jimnyImg from '../assets/cars/jimny.jpg'
+import scorpioClassicImg from '../assets/cars/scorpio-classic.jpg'
+import safariImg from '../assets/cars/safari.jpg'
+import tharRoxxImg from '../assets/cars/thar-roxx.jpg'
+import scorpioNImg from '../assets/cars/scorpio-n.jpg'
 
 export const cars: Car[] = [
+  // ── Budget Segment ─────────────────────────────────────
   {
-    id: 'swift',
-    name: 'Maruti Swift Dzire',
+    id: 'punch',
+    name: 'Tata Punch',
     city: 'Delhi',
-    pricePerDay: 1899,
-    images: [dzireImg],
+    pricePerDay: 2000,
+    images: [punchImg],
     seats: 5,
     transmission: 'Manual',
     fuel: 'Petrol',
-    year: 2023,
-    engineCC: '1197 cc',
-    mileage: '23.26 km/l',
+    year: 2024,
+    engineCC: '1199 cc',
+    mileage: '18.97 km/l',
     description:
-      'The Maruti Swift Dzire is India\'s best-selling compact sedan — perfect for city commutes and highway trips alike. Fuel-efficient, comfortable, and easy to drive.',
-    features: ['Touchscreen Infotainment', 'Rear AC Vents', 'Keyless Entry', 'ABS + EBD', 'Dual Airbags', 'Auto Gear Shift (AGS)'],
-    bookedDates: [
-      { start: '2026-04-12', end: '2026-04-15' },
-      { start: '2026-04-20', end: '2026-04-22' },
-    ],
+      'The Tata Punch is a micro-SUV that combines SUV styling with city-friendly dimensions. Rugged, safe, and fun to drive — ideal for everyday commutes and weekend getaways.',
+    features: ['Touchscreen Infotainment', 'Auto Headlamps', 'Rain-Sensing Wipers', 'Dual Airbags', 'ABS + EBD', 'Harman Audio'],
+    bookedDates: [],
+  },
+
+  // ── Mid Segment (₹2,500/day) ────────────────────────────
+  {
+    id: 'glanza',
+    name: 'Toyota Glanza',
+    city: 'Delhi',
+    pricePerDay: 2500,
+    images: [glanzaImg],
+    seats: 5,
+    transmission: 'Automatic',
+    fuel: 'Petrol',
+    year: 2024,
+    engineCC: '1197 cc',
+    mileage: '22.35 km/l',
+    description:
+      'The Toyota Glanza is a premium hatchback with Toyota reliability and a feature-rich cabin. Perfect for city drives and long highway cruises alike.',
+    features: ['HUD Display', '360° Camera', 'Wireless Charging', 'OTA Updates', '6 Airbags', 'Toyota Connected'],
+    bookedDates: [],
   },
   {
     id: 'baleno',
     name: 'Maruti Baleno',
-    city: 'Noida',
-    pricePerDay: 2299,
+    city: 'Delhi',
+    pricePerDay: 2500,
     images: [balenoImg],
     seats: 5,
     transmission: 'Automatic',
     fuel: 'Petrol',
-    year: 2023,
+    year: 2024,
     engineCC: '1197 cc',
     mileage: '22.35 km/l',
     description:
@@ -47,81 +69,63 @@ export const cars: Car[] = [
     bookedDates: [{ start: '2026-04-11', end: '2026-04-13' }],
   },
   {
-    id: 'creta',
-    name: 'Hyundai Creta',
+    id: 'fronx',
+    name: 'Maruti Fronx',
     city: 'Delhi',
-    pricePerDay: 3299,
-    images: [cretaImg],
+    pricePerDay: 2500,
+    images: [fronxImg],
     seats: 5,
     transmission: 'Automatic',
-    fuel: 'Diesel',
+    fuel: 'Petrol',
     year: 2024,
-    engineCC: '1493 cc',
-    mileage: '21.4 km/l',
+    engineCC: '1197 cc',
+    mileage: '21.5 km/l',
     description:
-      'The Hyundai Creta is India\'s most popular SUV — combining bold styling, a premium cabin, and powerful diesel performance for every road condition.',
-    features: ['Panoramic Sunroof', 'BOSE Sound System', 'Ventilated Seats', 'ADAS Suite', '6 Airbags', 'BlueLink Connected Car'],
-    bookedDates: [{ start: '2026-04-18', end: '2026-04-21' }],
+      'The Maruti Fronx is a stylish coupe-SUV that blends sporty design with practicality. Its turbo-petrol engine and premium cabin make every drive exciting.',
+    features: ['Turbo Boosterjet Engine', 'HUD Display', 'Wireless CarPlay', 'Sunroof', '6 Airbags', 'Cruise Control'],
+    bookedDates: [],
+  },
+  {
+    id: 'swift',
+    name: 'Maruti Swift',
+    city: 'Delhi',
+    pricePerDay: 2500,
+    images: [swiftImg],
+    seats: 5,
+    transmission: 'Manual',
+    fuel: 'Petrol',
+    year: 2024,
+    engineCC: '1197 cc',
+    mileage: '23.20 km/l',
+    description:
+      'The all-new Maruti Swift is India\'s favourite hatchback — sporty, fuel-efficient, and loaded with tech. Perfect for zipping through city traffic.',
+    features: ['Touchscreen Infotainment', 'Rear AC Vents', 'Keyless Entry', 'ABS + EBD', 'Dual Airbags', 'Auto Gear Shift (AGS)'],
+    bookedDates: [],
+  },
+  {
+    id: 'altroz',
+    name: 'Tata Altroz',
+    city: 'Delhi',
+    pricePerDay: 2500,
+    images: [altrozImg],
+    seats: 5,
+    transmission: 'Manual',
+    fuel: 'Petrol',
+    year: 2024,
+    engineCC: '1199 cc',
+    mileage: '22.0 km/l',
+    description:
+      'The Tata Altroz is a 5-star safety rated premium hatchback with a spacious cabin and refined ride quality. A perfect blend of style and substance.',
+    features: ['iRA Connected Car', '7" Touchscreen', 'Auto AC', 'Projector Headlamps', 'Dual Airbags', '5-Star GNCAP Safety'],
+    bookedDates: [],
   },
 
-  {
-    id: 'xuv700',
-    name: 'Mahindra XUV700',
-    city: 'Delhi',
-    pricePerDay: 5499,
-    images: [xuv700Img],
-    seats: 7,
-    transmission: 'Automatic',
-    fuel: 'Petrol',
-    year: 2024,
-    engineCC: '1999 cc',
-    mileage: '15.1 km/l',
-    description:
-      'The Mahindra XUV700 is a feature-loaded 7-seater SUV that punches well above its price. With ADAS, a stunning dual-screen setup, and a powerful turbo-petrol engine, it\'s a class apart.',
-    features: ['ADAS Level 2', 'Dual 10.25" Screens', 'Sony 3D Sound', 'Panoramic Sunroof', '7 Airbags', 'AdrenoX Connected'],
-    bookedDates: [],
-  },
-  {
-    id: 'city',
-    name: 'Honda City',
-    city: 'Noida',
-    pricePerDay: 2799,
-    images: [
-      'https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=1600&q=80',
-    ],
-    seats: 5,
-    transmission: 'Automatic',
-    fuel: 'Petrol',
-    year: 2023,
-    engineCC: '1498 cc',
-    mileage: '18.4 km/l',
-    description:
-      'The Honda City is a premium sedan that blends sporty styling with a refined ride. Its spacious cabin, powerful VTEC engine, and advanced safety features make it a top choice.',
-    features: ['Honda Sensing ADAS', 'Wireless Apple CarPlay', 'Sunroof', 'Lane Watch Camera', '6 Airbags', 'Paddle Shifters'],
-    bookedDates: [{ start: '2026-04-15', end: '2026-04-18' }],
-  },
-  {
-    id: 'scorpio',
-    name: 'Mahindra Scorpio-N',
-    city: 'Delhi',
-    pricePerDay: 4999,
-    images: [scorpioImg],
-    seats: 7,
-    transmission: 'Manual',
-    fuel: 'Diesel',
-    year: 2024,
-    engineCC: '2184 cc',
-    mileage: '15.2 km/l',
-    description:
-      'The Mahindra Scorpio-N is a bold, body-on-frame SUV built for adventure. With a powerful diesel engine, 4WD option, and commanding stance, it dominates both city roads and rough terrain.',
-    features: ['4WD with Low Range', 'Sony Sound System', 'Wireless Charging', 'Sunroof', '6 Airbags', 'Terrain Modes'],
-    bookedDates: [],
-  },
+  // ── SUV & Off-Road Segment ──────────────────────────────
   {
     id: 'thar',
     name: 'Mahindra Thar',
     city: 'Delhi',
-    pricePerDay: 4299,
+    pricePerDay: 4500,
     images: [tharImg],
     seats: 4,
     transmission: 'Manual',
@@ -135,20 +139,90 @@ export const cars: Car[] = [
     bookedDates: [],
   },
   {
-    id: 'verna',
-    name: 'Hyundai Verna',
-    city: 'Noida',
-    pricePerDay: 2599,
-    images: [vernaImg],
-    seats: 5,
-    transmission: 'Automatic',
+    id: 'jimny',
+    name: 'Maruti Jimny',
+    city: 'Delhi',
+    pricePerDay: 4500,
+    images: [jimnyImg],
+    seats: 4,
+    transmission: 'Manual',
     fuel: 'Petrol',
     year: 2024,
-    engineCC: '1497 cc',
-    mileage: '20.6 km/l',
+    engineCC: '1462 cc',
+    mileage: '16.94 km/l',
     description:
-      'The all-new Hyundai Verna is a stunning sedan with a bold coupe-like silhouette, a feature-rich cabin, and a punchy turbo-petrol engine. It redefines the premium sedan segment.',
-    features: ['Panoramic Sunroof', 'ADAS Level 2', 'Bose Sound System', 'Ventilated Seats', '6 Airbags', 'Digital Cluster'],
+      'The Maruti Jimny is a compact off-roader with legendary 4WD capability. Light, agile, and adventure-ready, it conquers trails that bigger SUVs can\'t.',
+    features: ['AllGrip Pro 4WD', 'Ladder-Frame Chassis', 'Hill Hold & Descent', 'Touchscreen Infotainment', 'Dual Airbags', 'ESP + Brake Assist'],
+    bookedDates: [],
+  },
+  {
+    id: 'scorpio-classic',
+    name: 'Mahindra Scorpio Classic',
+    city: 'Delhi',
+    pricePerDay: 4500,
+    images: [scorpioClassicImg],
+    seats: 7,
+    transmission: 'Manual',
+    fuel: 'Diesel',
+    year: 2024,
+    engineCC: '2184 cc',
+    mileage: '15.4 km/l',
+    description:
+      'The Mahindra Scorpio Classic is the tried-and-true workhorse — rugged, spacious, and built for Indian roads. A commanding presence on any terrain.',
+    features: ['mHawk Diesel Engine', 'Captain Seats', 'Micro-Hybrid Tech', 'Touchscreen Infotainment', 'Dual Airbags', 'Follow-Me-Home Headlamps'],
+    bookedDates: [],
+  },
+
+  // ── Premium Segment ─────────────────────────────────────
+  {
+    id: 'tata-safari',
+    name: 'Tata Safari',
+    city: 'Delhi',
+    pricePerDay: 5500,
+    images: [safariImg],
+    seats: 7,
+    transmission: 'Automatic',
+    fuel: 'Diesel',
+    year: 2024,
+    engineCC: '1956 cc',
+    mileage: '14.5 km/l',
+    description:
+      'The Tata Safari is a flagship 7-seater SUV with a luxurious cabin, panoramic sunroof, and commanding road presence. Perfect for family road trips.',
+    features: ['Panoramic Sunroof', 'JBL Sound System', 'Ventilated Seats', 'ADAS Suite', '6 Airbags', 'Terrain Modes'],
+    bookedDates: [],
+  },
+  {
+    id: 'thar-roxx',
+    name: 'Mahindra Thar Roxx',
+    city: 'Delhi',
+    pricePerDay: 6000,
+    images: [tharRoxxImg],
+    seats: 5,
+    transmission: 'Automatic',
+    fuel: 'Diesel',
+    year: 2024,
+    engineCC: '2184 cc',
+    mileage: '15.2 km/l',
+    description:
+      'The Mahindra Thar Roxx is the evolved, 5-door version of the iconic Thar — combining off-road DNA with premium comfort, a spacious cabin, and cutting-edge tech.',
+    features: ['4WD with Terrain Modes', 'Panoramic Sunroof', 'Adrenox Connected', 'Dual 10.25" Screens', '6 Airbags', 'Level 2 ADAS'],
+    bookedDates: [],
+  },
+  {
+    id: 'scorpio-n',
+    name: 'Mahindra Scorpio N',
+    city: 'Delhi',
+    pricePerDay: 6000,
+    images: [scorpioNImg],
+    seats: 7,
+    transmission: 'Automatic',
+    fuel: 'Diesel',
+    year: 2024,
+    engineCC: '2184 cc',
+    mileage: '15.2 km/l',
+    description:
+      'The Mahindra Scorpio N is a bold, body-on-frame SUV built for adventure. With a powerful diesel engine, 4WD option, and commanding stance, it dominates both city roads and rough terrain.',
+    features: ['4WD with Low Range', 'Sony Sound System', 'Wireless Charging', 'Sunroof', '6 Airbags', 'Terrain Modes'],
     bookedDates: [],
   },
 ]

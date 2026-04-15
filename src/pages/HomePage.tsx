@@ -204,7 +204,7 @@ export function HomePage() {
           <div className="rounded-2xl border border-white/20 bg-black/40 p-4 backdrop-blur-md shadow-2xl">
             <div className="text-xs text-slate-300 mb-1">Starting from</div>
             <div className="text-2xl font-black text-white">
-              ₹1,899<span className="text-xs font-normal text-slate-400">/day</span>
+              ₹2,000<span className="text-xs font-normal text-slate-400">/day</span>
             </div>
             <div className="mt-2 flex items-center gap-2 text-xs text-emerald-400">
               <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
@@ -263,7 +263,7 @@ export function HomePage() {
       <section className="grid gap-8">
         <div className="text-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-100 px-4 py-1.5 text-xs font-bold text-slate-600 mb-3">The Team</div>
-          <h2 className="text-2xl font-black text-slate-900 md:text-3xl">Meet the people behind DriveEasy</h2>
+          <h2 className="text-2xl font-black text-slate-900 md:text-3xl">Meet the people behind Car Rental Express</h2>
           <p className="mt-2 text-sm text-slate-500">Small team, big passion for making rentals better.</p>
         </div>
         <div className="grid gap-5 md:grid-cols-3">

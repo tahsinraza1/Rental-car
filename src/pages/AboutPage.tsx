@@ -17,7 +17,7 @@ const values = [
 ]
 
 const milestones = [
-  { year: '2026', event: 'DriveEasy founded in Delhi with 3 cars' },
+  { year: '2026', event: 'Car Rental Express founded in Delhi with 3 cars' },
 ]
 
 export function AboutPage() {
@@ -26,7 +26,7 @@ export function AboutPage() {
 
       {/* Hero */}
       <section className="relative overflow-hidden rounded-3xl min-h-[420px] flex items-center shadow-xl">
-        <img src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&w=1920&q=80" alt="About DriveEasy" className="absolute inset-0 h-full w-full object-cover object-center" />
+        <img src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&w=1920&q=80" alt="About Car Rental Express" className="absolute inset-0 h-full w-full object-cover object-center" />
         <div className="absolute inset-0 bg-gradient-to-r from-slate-900/95 via-slate-900/80 to-slate-900/40" />
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-transparent to-transparent" />
         <div className="absolute -left-32 top-0 size-96 rounded-full bg-orange-500/20 blur-3xl pointer-events-none" />
@@ -39,7 +39,7 @@ export function AboutPage() {
             <span className="bg-gradient-to-r from-orange-400 to-amber-300 bg-clip-text text-transparent">car rentals in India</span>
           </h1>
           <p className="mt-5 text-base text-slate-300 leading-relaxed">
-            DriveEasy was born from a simple frustration — renting a car in India was too complicated, too expensive, and too impersonal. We built a platform that connects renters directly with car owners via WhatsApp.
+            Car Rental Express was born from a simple frustration — renting a car in India was too complicated, too expensive, and too impersonal. We built a platform that connects renters directly with car owners via WhatsApp.
           </p>
         </div>
       </section>
@@ -61,7 +61,7 @@ export function AboutPage() {
           </div>
           <h2 className="text-2xl font-black text-slate-900 md:text-3xl leading-tight">Making car rentals personal again</h2>
           <p className="mt-4 text-sm text-slate-600 leading-relaxed">
-            We believe the best transactions happen between real people. When you rent through DriveEasy, you're not dealing with a faceless corporation — you're talking directly to the car owner who takes pride in their vehicle.
+            We believe the best transactions happen between real people. When you rent through Car Rental Express, you're not dealing with a faceless corporation — you're talking directly to the car owner who takes pride in their vehicle.
           </p>
           <p className="mt-3 text-sm text-slate-600 leading-relaxed">
             This means better prices, more flexibility, and a more personal experience. The owner knows their car inside out and can answer any question you have.
@@ -120,7 +120,7 @@ export function AboutPage() {
           <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-100 px-4 py-1.5 text-xs font-bold text-slate-600 mb-4">Our Journey</div>
           <h2 className="text-2xl font-black text-slate-900 md:text-3xl">Redefining rentals in Delhi NCR</h2>
           <p className="mt-3 text-sm text-slate-600 leading-relaxed">
-            We started DriveEasy with a single goal: to make renting a car as simple as texting a friend.
+            We started Car Rental Express with a single goal: to make renting a car as simple as texting a friend.
             Frustrated by hidden fees, confusing apps, and corporate middlemen, we launched with just 3 cars
             in Delhi, offering a revolutionary direct-to-owner WhatsApp booking model.
           </p>
@@ -147,7 +147,7 @@ export function AboutPage() {
           </div>
         </div>
         <div className="relative overflow-hidden rounded-3xl aspect-[3/4] md:sticky md:top-24 shadow-lg">
-          <img src="https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80" alt="DriveEasy journey" className="h-full w-full object-cover" />
+          <img src="https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80" alt="Car Rental Express journey" className="h-full w-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent" />
           <div className="absolute bottom-6 left-6 right-6">
             <div className="rounded-2xl border border-white/20 bg-slate-900/80 p-4 backdrop-blur-sm">
@@ -167,7 +167,7 @@ export function AboutPage() {
       <section className="grid gap-8">
         <div className="text-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-100 px-4 py-1.5 text-xs font-bold text-slate-600 mb-3">The Team</div>
-          <h2 className="text-2xl font-black text-slate-900 md:text-3xl">Meet the people behind DriveEasy</h2>
+          <h2 className="text-2xl font-black text-slate-900 md:text-3xl">Meet the people behind Car Rental Express</h2>
           <p className="mt-2 text-sm text-slate-500">Small team, big passion for making rentals better.</p>
         </div>
         <div className="grid gap-5 md:grid-cols-3">
