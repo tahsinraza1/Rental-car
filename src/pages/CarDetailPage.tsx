@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { Link, useParams, useSearchParams } from 'react-router-dom'
 import { BookingCard } from '../components/booking/BookingCard'
 import { cars, getCarById } from '../data/cars'
+import { lookupAvailability, lookupPrice, lookupSheetName, useSheetAvailability } from '../lib/sheetAvailability'
 
 const fuelIcons: Record<string, string> = {
   Petrol: '⛽', Diesel: '🛢️', EV: '⚡', Hybrid: '🌿',
@@ -12,6 +13,10 @@ export function CarDetailPage() {
   const car = carId ? getCarById(carId) : undefined
   const [search] = useSearchParams()
   const [activeImg, setActiveImg] = useState(0)
+  const { rows: sheetRows, loading: sheetLoading } = useSheetAvailability()
+  const sheetName = sheetLoading ? undefined : lookupSheetName(car?.id ?? '', car?.name ?? '', sheetRows)
+  const sheetPrice = sheetLoading ? undefined : lookupPrice(car?.id ?? '', car?.name ?? '', sheetRows)
+  const displayName = sheetName?.trim() || car?.name
 
   const initial = useMemo(() => ({
     pickup: search.get('pickup') ?? '',
@@ -44,7 +49,7 @@ export function CarDetailPage() {
         <svg className="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
         </svg>
-        <span className="text-slate-700 font-medium">{car.name}</span>
+        <span className="text-slate-700 font-medium">{displayName}</span>
       </nav>
 
       <div className="grid gap-6 lg:grid-cols-12">
@@ -58,12 +63,28 @@ export function CarDetailPage() {
               <div className="absolute inset-0 bg-gradient-to-t from-slate-900/50 via-transparent to-transparent" />
               <div className="absolute top-4 right-4">
                 <div className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold backdrop-blur-sm ${
-                  car.bookedDates.length === 0
-                    ? 'border-emerald-400/40 bg-emerald-500/20 text-emerald-200'
-                    : 'border-white/20 bg-black/30 text-slate-300'
+                  sheetLoading
+                    ? car.bookedDates.length === 0
+                      ? 'border-emerald-400/40 bg-emerald-500/20 text-emerald-200'
+                      : 'border-white/20 bg-black/30 text-slate-300'
+                    : lookupAvailability(car.id, car.name, sheetRows).toLowerCase() === 'unavailable'
+                    ? 'border-rose-400/40 bg-rose-500/20 text-rose-200'
+                    : 'border-emerald-400/40 bg-emerald-500/20 text-emerald-200'
                 }`}>
-                  <span className={`size-1.5 rounded-full ${car.bookedDates.length === 0 ? 'bg-emerald-400 animate-pulse' : 'bg-slate-400'}`} />
-                  {car.bookedDates.length === 0 ? 'Available now' : 'Check dates'}
+                  <span className={`size-1.5 rounded-full ${
+                    sheetLoading
+                      ? car.bookedDates.length === 0
+                        ? 'bg-emerald-400 animate-pulse'
+                        : 'bg-slate-400'
+                      : lookupAvailability(car.id, car.name, sheetRows).toLowerCase() === 'unavailable'
+                        ? 'bg-rose-400'
+                        : 'bg-emerald-400 animate-pulse'
+                  }`} />
+                  {sheetLoading
+                    ? car.bookedDates.length === 0
+                      ? 'Available now'
+                      : 'Check dates'
+                    : lookupAvailability(car.id, car.name, sheetRows)}
                 </div>
               </div>
             </div>
@@ -85,7 +106,7 @@ export function CarDetailPage() {
           <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
-                <h1 className="text-2xl font-black text-slate-900">{car.name}</h1>
+                <h1 className="text-2xl font-black text-slate-900">{displayName}</h1>
                 <div className="mt-1 flex items-center gap-1.5 text-sm text-slate-500">
                   <svg className="size-4 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -95,7 +116,7 @@ export function CarDetailPage() {
                 </div>
               </div>
               <div className="text-right">
-                <div className="text-3xl font-black text-orange-600">₹{car.pricePerDay.toLocaleString('en-IN')}</div>
+                <div className="text-3xl font-black text-orange-600">₹{(sheetPrice ?? car.pricePerDay).toLocaleString('en-IN')}</div>
                 <div className="text-xs text-slate-400">per day</div>
               </div>
             </div>

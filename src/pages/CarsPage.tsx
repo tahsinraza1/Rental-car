@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { CarCard } from '../components/cars/CarCard'
 import { cars } from '../data/cars'
+import { lookupAvailability, lookupPrice, lookupSheetName, useSheetAvailability } from '../lib/sheetAvailability'
 
 const transmissions = ['All', 'Manual', 'Automatic']
 const fuels = ['All', 'Petrol', 'Diesel', 'EV', 'Hybrid']
@@ -10,6 +11,7 @@ export function CarsPage() {
   const [transmission, setTransmission] = useState('All')
   const [fuel, setFuel] = useState('All')
   const [sortBy, setSortBy] = useState<'price-asc' | 'price-desc' | 'name'>('price-asc')
+  const { rows: sheetRows, loading: sheetLoading } = useSheetAvailability()
 
   const filtered = useMemo(() => {
     let result = [...cars]
@@ -149,7 +151,15 @@ export function CarsPage() {
         </div>
       ) : (
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {filtered.map((car) => <CarCard key={car.id} car={car} />)}
+          {filtered.map((car) => (
+            <CarCard
+              key={car.id}
+              car={car}
+              availability={sheetLoading ? undefined : lookupAvailability(car.id, car.name, sheetRows)}
+              sheetPrice={sheetLoading ? undefined : lookupPrice(car.id, car.name, sheetRows)}
+              sheetName={sheetLoading ? undefined : lookupSheetName(car.id, car.name, sheetRows)}
+            />
+          ))}
         </div>
       )}
     </div>

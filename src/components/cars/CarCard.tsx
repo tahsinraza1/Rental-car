@@ -5,7 +5,12 @@ const fuelIcons: Record<string, string> = {
   Petrol: '⛽', Diesel: '🛢️', EV: '⚡', Hybrid: '🌿',
 }
 
-export function CarCard({ car }: { car: Car }) {
+export function CarCard({ car, availability, sheetPrice, sheetName }: { car: Car; availability?: string; sheetPrice?: number; sheetName?: string }) {
+  const statusText = availability?.trim() || 'Available'
+  const isAvailable = statusText.toLowerCase() !== 'unavailable'
+  const displayPrice = sheetPrice ?? car.pricePerDay
+  const displayName = sheetName?.trim() || car.name
+
   return (
     <Link
       to={`/cars/${car.id}`}
@@ -30,16 +35,20 @@ export function CarCard({ car }: { car: Car }) {
 
         {/* Availability */}
         <div className="absolute top-3 right-3">
-          <div className="flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-semibold backdrop-blur-sm border-emerald-400/40 bg-emerald-500/20 text-emerald-200">
-            <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            Available
+          <div className={`flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-semibold backdrop-blur-sm ${
+            isAvailable
+              ? 'border-emerald-400/40 bg-emerald-500/20 text-emerald-200'
+              : 'border-rose-400/40 bg-rose-500/20 text-rose-200'
+          }`}>
+            <span className={`size-1.5 rounded-full ${isAvailable ? 'bg-emerald-400 animate-pulse' : 'bg-rose-400'}`} />
+            {statusText}
           </div>
         </div>
 
         {/* Bottom overlay */}
         <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between">
           <div>
-            <div className="text-base font-bold text-white drop-shadow">{car.name}</div>
+            <div className="text-base font-bold text-white drop-shadow">{displayName}</div>
             <div className="flex items-center gap-1 text-xs text-slate-300">
               <svg className="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -49,7 +58,7 @@ export function CarCard({ car }: { car: Car }) {
             </div>
           </div>
           <div className="text-right">
-            <div className="text-lg font-black text-white drop-shadow">₹{car.pricePerDay.toLocaleString('en-IN')}</div>
+            <div className="text-lg font-black text-white drop-shadow">₹{displayPrice.toLocaleString('en-IN')}</div>
             <div className="text-xs text-slate-300">/ day</div>
           </div>
         </div>

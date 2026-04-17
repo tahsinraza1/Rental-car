@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { CTABanner } from '../components/home/CTABanner'
+import { lookupAvailability, lookupPrice, lookupSheetName, useSheetAvailability } from '../lib/sheetAvailability'
 import { HowItWorks } from '../components/home/HowItWorks'
 import { StatsSection } from '../components/home/StatsSection'
 import { Testimonials } from '../components/home/Testimonials'
@@ -44,6 +45,7 @@ export function HomePage() {
   const featured = useMemo(() => cars.slice(0, 6), [])
   const [active, setActive] = useState(0)
   const [fading, setFading] = useState(false)
+  const { rows: sheetRows, loading: sheetLoading } = useSheetAvailability()
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -242,7 +244,13 @@ export function HomePage() {
         </div>
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {featured.map((car) => (
-            <CarCard key={car.id} car={car} />
+            <CarCard
+              key={car.id}
+              car={car}
+              availability={sheetLoading ? undefined : lookupAvailability(car.id, car.name, sheetRows)}
+              sheetPrice={sheetLoading ? undefined : lookupPrice(car.id, car.name, sheetRows)}
+              sheetName={sheetLoading ? undefined : lookupSheetName(car.id, car.name, sheetRows)}
+            />
           ))}
         </div>
       </section>
