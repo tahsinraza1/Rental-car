@@ -5,9 +5,10 @@ const fuelIcons: Record<string, string> = {
   Petrol: '⛽', Diesel: '🛢️', EV: '⚡', Hybrid: '🌿',
 }
 
-export function CarCard({ car, availability, sheetPrice, sheetName }: { car: Car; availability?: string; sheetPrice?: number; sheetName?: string }) {
+export function CarCard({ car, availability, sheetPrice, sheetName, isLoading }: { car: Car; availability?: string; sheetPrice?: number; sheetName?: string; isLoading?: boolean }) {
   const statusText = availability?.trim() || 'Available'
   const isAvailable = statusText.toLowerCase() !== 'unavailable'
+  const displayStatus = isAvailable ? 'Available' : 'Unavailable'
   const displayPrice = sheetPrice ?? car.pricePerDay
   const displayName = sheetName?.trim() || car.name
 
@@ -35,21 +36,27 @@ export function CarCard({ car, availability, sheetPrice, sheetName }: { car: Car
 
         {/* Availability */}
         <div className="absolute top-3 right-3">
-          <div className={`flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-semibold backdrop-blur-sm ${
-            isAvailable
-              ? 'border-emerald-400/40 bg-emerald-500/20 text-emerald-200'
-              : 'border-rose-400/40 bg-rose-500/20 text-rose-200'
-          }`}>
-            <span className={`size-1.5 rounded-full ${isAvailable ? 'bg-emerald-400 animate-pulse' : 'bg-rose-400'}`} />
-            {statusText}
-          </div>
+          {isLoading ? (
+            <div className="h-6 w-24 rounded-full bg-slate-200/50 animate-pulse backdrop-blur-sm" />
+          ) : (
+            <div className={`flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] uppercase tracking-wide font-black shadow-lg shadow-black/10 backdrop-blur-md ${
+              isAvailable
+                ? 'border-emerald-500/20 bg-white/95 text-emerald-600'
+                : 'border-rose-500/20 bg-white/95 text-rose-600'
+            }`}>
+              <span className={`size-1.5 rounded-full ${isAvailable ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`} />
+              {displayStatus}
+            </div>
+          )}
         </div>
 
         {/* Bottom overlay */}
         <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between">
           <div>
-            <div className="text-base font-bold text-white drop-shadow">{displayName}</div>
-            <div className="flex items-center gap-1 text-xs text-slate-300">
+            <div className="text-base font-bold text-white drop-shadow">
+              {isLoading ? <div className="h-5 w-24 rounded bg-white/30 animate-pulse" /> : displayName}
+            </div>
+            <div className="flex items-center gap-1 text-xs text-slate-300 mt-1">
               <svg className="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
                 <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
@@ -58,8 +65,14 @@ export function CarCard({ car, availability, sheetPrice, sheetName }: { car: Car
             </div>
           </div>
           <div className="text-right">
-            <div className="text-lg font-black text-white drop-shadow">₹{displayPrice.toLocaleString('en-IN')}</div>
-            <div className="text-xs text-slate-300">/ day</div>
+            <div className="text-lg font-black text-white drop-shadow">
+              {isLoading ? (
+                <div className="h-6 w-16 rounded bg-white/30 animate-pulse ml-auto" />
+              ) : (
+                `₹${displayPrice.toLocaleString('en-IN')}`
+              )}
+            </div>
+            <div className="text-xs text-slate-300 mt-1">/ day</div>
           </div>
         </div>
       </div>

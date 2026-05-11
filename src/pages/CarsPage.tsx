@@ -3,13 +3,11 @@ import { CarCard } from '../components/cars/CarCard'
 import { cars } from '../data/cars'
 import { lookupAvailability, lookupPrice, lookupSheetName, useSheetAvailability } from '../lib/sheetAvailability'
 
-const transmissions = ['All', 'Manual', 'Automatic']
-const fuels = ['All', 'Petrol', 'Diesel', 'EV', 'Hybrid']
+const availabilities = ['All', 'Available', 'Unavailable']
 
 export function CarsPage() {
   const [q, setQ] = useState('')
-  const [transmission, setTransmission] = useState('All')
-  const [fuel, setFuel] = useState('All')
+  const [availabilityFilter, setAvailabilityFilter] = useState('All')
   const [sortBy, setSortBy] = useState<'price-asc' | 'price-desc' | 'name'>('price-asc')
   const { rows: sheetRows, loading: sheetLoading } = useSheetAvailability()
 
@@ -17,20 +15,26 @@ export function CarsPage() {
     let result = [...cars]
     const s = q.trim().toLowerCase()
     if (s) result = result.filter((c) => c.name.toLowerCase().includes(s))
-    if (transmission !== 'All') result = result.filter((c) => c.transmission === transmission)
-    if (fuel !== 'All') result = result.filter((c) => c.fuel === fuel)
+    if (availabilityFilter !== 'All') {
+      const isFilterAvailable = availabilityFilter === 'Available'
+      result = result.filter((c) => {
+        // Use live sheet availability if loaded, otherwise assume available
+        const status = sheetLoading ? 'Available' : lookupAvailability(c.id, c.name, sheetRows)
+        const isCarAvailable = status.trim().toLowerCase() !== 'unavailable'
+        return isFilterAvailable ? isCarAvailable : !isCarAvailable
+      })
+    }
     if (sortBy === 'price-asc') result.sort((a, b) => a.pricePerDay - b.pricePerDay)
     else if (sortBy === 'price-desc') result.sort((a, b) => b.pricePerDay - a.pricePerDay)
     else result.sort((a, b) => a.name.localeCompare(b.name))
     return result
-  }, [q, transmission, fuel, sortBy])
+  }, [q, availabilityFilter, sortBy, sheetRows, sheetLoading])
 
-  const hasFilters = q || transmission !== 'All' || fuel !== 'All'
+  const hasFilters = q !== '' || availabilityFilter !== 'All'
 
   function clearFilters() {
     setQ('')
-    setTransmission('All')
-    setFuel('All')
+    setAvailabilityFilter('All')
     setSortBy('price-asc')
   }
 
@@ -53,7 +57,7 @@ export function CarsPage() {
 
       {/* Filters */}
       <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {/* Search */}
           <div className="lg:col-span-2">
             <label className="grid gap-1.5">
@@ -72,27 +76,15 @@ export function CarsPage() {
             </label>
           </div>
 
-          {/* Transmission */}
+          {/* Availability */}
           <label className="grid gap-1.5">
-            <span className="text-xs font-semibold text-slate-600">Transmission</span>
+            <span className="text-xs font-semibold text-slate-600">Availability</span>
             <select
-              value={transmission}
-              onChange={(e) => setTransmission(e.target.value)}
+              value={availabilityFilter}
+              onChange={(e) => setAvailabilityFilter(e.target.value)}
               className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-400/50 focus:border-orange-300 transition"
             >
-              {transmissions.map((t) => <option key={t} value={t}>{t}</option>)}
-            </select>
-          </label>
-
-          {/* Fuel */}
-          <label className="grid gap-1.5">
-            <span className="text-xs font-semibold text-slate-600">Fuel Type</span>
-            <select
-              value={fuel}
-              onChange={(e) => setFuel(e.target.value)}
-              className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-400/50 focus:border-orange-300 transition"
-            >
-              {fuels.map((f) => <option key={f} value={f}>{f}</option>)}
+              {availabilities.map((a) => <option key={a} value={a}>{a}</option>)}
             </select>
           </label>
         </div>
@@ -155,6 +147,7 @@ export function CarsPage() {
             <CarCard
               key={car.id}
               car={car}
+              isLoading={sheetLoading}
               availability={sheetLoading ? undefined : lookupAvailability(car.id, car.name, sheetRows)}
               sheetPrice={sheetLoading ? undefined : lookupPrice(car.id, car.name, sheetRows)}
               sheetName={sheetLoading ? undefined : lookupSheetName(car.id, car.name, sheetRows)}

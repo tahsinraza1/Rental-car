@@ -1,13 +1,7 @@
 import { Link } from 'react-router-dom'
-import faizanImg from '../assets/owners/faizan.jpg'
-import imranImg from '../assets/owners/imran.jpg'
-import izemamImg from '../assets/owners/inzemam.jpg'
 
-const team = [
-  { name: 'Faizan ahmed', role: 'Founder & CEO', avatar: faizanImg, bio: 'Passionate about making mobility accessible to everyone in Delhi & Noida.' },
-  { name: 'sheikh imran', role: 'Operations Head', avatar: imranImg, bio: 'Ensures every booking goes smoothly from inquiry to key handover.' },
-  { name: 'Inzemam qureshi', role: 'Customer Success', avatar: izemamImg, bio: 'Your go-to person for any questions, issues, or special requests.' },
-]
+
+
 
 const values = [
   { title: 'Transparency', description: 'No hidden fees, no surprise charges. The price you see is the price you pay — always.', image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=600&q=80', bg: 'bg-blue-50', border: 'border-blue-200', accent: 'text-blue-700', tag: 'bg-blue-100 text-blue-700' },
@@ -163,31 +157,6 @@ export function AboutPage() {
         </div>
       </section>
 
-      {/* Team */}
-      <section className="grid gap-8">
-        <div className="text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-100 px-4 py-1.5 text-xs font-bold text-slate-600 mb-3">The Team</div>
-          <h2 className="text-2xl font-black text-slate-900 md:text-3xl">Meet the people behind Car Rental Express</h2>
-          <p className="mt-2 text-sm text-slate-500">Small team, big passion for making rentals better.</p>
-        </div>
-        <div className="grid gap-5 md:grid-cols-3">
-          {team.map((member) => (
-            <div key={member.name} className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
-              <div className="relative aspect-[4/5] overflow-hidden">
-                <img src={member.avatar} alt={member.name} className="h-full w-full object-cover group-hover:scale-110 transition duration-500" />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-4">
-                  <div className="text-sm font-bold text-white">{member.name}</div>
-                  <div className="text-xs text-orange-300">{member.role}</div>
-                </div>
-              </div>
-              <div className="p-4">
-                <p className="text-xs text-slate-500 leading-relaxed">{member.bio}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
 
       {/* CTA */}
       <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-orange-500 via-red-500 to-rose-600 p-10 md:p-14 text-center shadow-2xl shadow-orange-300">

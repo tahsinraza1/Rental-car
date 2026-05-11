@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 
 export type SheetRow = Record<string, string | undefined> & {
   Car?: string
+  Cars?: string
   'Price '?: string
   Availability?: string
   id?: string
@@ -35,11 +36,11 @@ function lookupSheetRow(carId: string, carName: string, rows: SheetRow[]) {
   }
 
   const normalizedName = normalizeString(carName)
-  const exactNameMatch = rows.find((row) => normalizeString(row.Car ?? '') === normalizedName)
+  const exactNameMatch = rows.find((row) => normalizeString(row.Cars ?? row.Car ?? '') === normalizedName)
   if (exactNameMatch) return exactNameMatch
 
   return rows.find((row) => {
-    const rowName = normalizeString(row.Car ?? '')
+    const rowName = normalizeString(row.Cars ?? row.Car ?? '')
     return rowName && (normalizedName.includes(rowName) || rowName.includes(normalizedName))
   })
 }
@@ -58,7 +59,7 @@ export function lookupPrice(carId: string, carName: string, rows: SheetRow[]) {
 
 export function lookupSheetName(carId: string, carName: string, rows: SheetRow[]) {
   const row = lookupSheetRow(carId, carName, rows)
-  const sheetCar = row?.Car?.trim()
+  const sheetCar = (row?.Cars ?? row?.Car)?.trim()
   return sheetCar && sheetCar.length > 0 ? sheetCar : undefined
 }
 
