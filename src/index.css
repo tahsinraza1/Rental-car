@@ -1,18 +1,60 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Outfit", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: "Outfit", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --color-ink: #0f172a;
+  --color-muted: #64748b;
+  --color-paper: #f8fafc;
+  --color-cream: #f1f5f9;
+  --color-accent: #f97316;
+  --color-accent-soft: #fb923c;
+  --color-accent-dark: #ea580c;
+  --color-brand-orange: #f97316;
+}
+
+:root {
+  --color-paper: #f8fafc;
+  --color-ink: #0f172a;
+  --color-muted: #64748b;
+  --color-cream: #f1f5f9;
+}
+
+.dark {
+  --color-paper: #080d1a;
+  --color-ink: #f8fafc;
+  --color-muted: #94a3b8;
+  --color-cream: #0f172a;
+}
+
 html, body, #root {
   height: 100%;
 }
 
-body {
-  margin: 0;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background: #f8fafc;
-  color: #0f172a;
+html {
+  scroll-behavior: smooth !important;
 }
 
-html {
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background: var(--color-paper);
+  color: var(--color-ink);
   scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Smooth Global Theme Transitions */
+body, #root, header, nav, main, section, footer, div, table, thead, tbody, tr, td, th {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-duration: 350ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Scrollbar */
@@ -21,18 +63,57 @@ html {
 ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-/* DayPicker */
-.rdp-root {
-  --rdp-accent-color: #f97316;
-  --rdp-accent-background-color: rgba(249, 115, 22, 0.12);
+.dark ::-webkit-scrollbar-track { background: #0b1120; }
+.dark ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+.dark ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  text-wrap: balance;
+  letter-spacing: -0.025em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Gradient text */
+.font-heading {
+  font-family: var(--font-heading);
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
 .gradient-text {
   background: linear-gradient(135deg, #f97316, #ef4444);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+.text-gradient-hero {
+  background: linear-gradient(135deg, #fde047 0%, #fb923c 40%, #f97316 70%, #f43f5e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-brand {
+  background: linear-gradient(135deg, #f97316 0%, #f59e0b 50%, #f43f5e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.headline-glow {
+  filter: drop-shadow(0 4px 18px rgba(249, 115, 22, 0.45));
+}
+
+/* Price Highlight Utility */
+.price-tag {
+  color: #ea580c;
+  font-weight: 800;
+  letter-spacing: -0.02em;
 }
 
 /* Fleet marquee */
@@ -48,17 +129,433 @@ html {
   animation-play-state: paused;
 }
 
-/* Fade in up */
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(20px); }
+  from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 .animate-fade-in-up {
-  animation: fadeInUp 0.5s ease forwards;
+  animation: fadeInUp 0.55s ease forwards;
 }
 
-/* Shimmer on cards */
 @keyframes shimmer {
   0%   { background-position: -200% center; }
   100% { background-position: 200% center; }
 }
+
+.skeleton {
+  background: linear-gradient(90deg, #f1f5f9 0%, #ffffff 50%, #f1f5f9 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+/* Clean, Razor-Sharp Card Physics without subpixel blur */
+.card-3d-wrap {
+  transform: translateZ(0);
+}
+
+.card-3d-interactive {
+  transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1),
+              box-shadow 0.35s cubic-bezier(0.25, 1, 0.5, 1),
+              border-color 0.3s ease;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.card-3d-interactive:hover {
+  transform: translateY(-8px);
+  box-shadow: 
+    0 22px 45px -12px rgba(249, 115, 22, 0.24),
+    0 12px 24px -8px rgba(15, 23, 42, 0.1),
+    0 0 0 1.5px rgba(249, 115, 22, 0.4);
+}
+
+.card-bouncy {
+  transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1),
+              box-shadow 0.35s cubic-bezier(0.25, 1, 0.5, 1),
+              border-color 0.3s ease;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.card-bouncy:hover {
+  transform: translateY(-8px);
+  box-shadow: 
+    0 22px 45px -12px rgba(249, 115, 22, 0.24),
+    0 10px 20px -8px rgba(15, 23, 42, 0.1),
+    0 0 0 2px rgba(249, 115, 22, 0.4);
+}
+
+.card-bouncy:active {
+  transform: translateY(-2px);
+}
+
+/* Ultra-Animated Premium Review Card */
+.card-review-animated {
+  position: relative;
+  transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1),
+              box-shadow 0.35s cubic-bezier(0.25, 1, 0.5, 1),
+              border-color 0.3s ease,
+              background 0.3s ease;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.card-review-animated::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 2px;
+  background: linear-gradient(135deg, rgba(249, 115, 22, 0.6), rgba(251, 191, 36, 0.3), rgba(244, 63, 94, 0.5));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.card-review-animated:hover::before {
+  opacity: 1;
+}
+
+.card-review-animated:hover {
+  transform: translateY(-8px);
+  box-shadow: 
+    0 24px 50px -12px rgba(249, 115, 22, 0.25),
+    0 12px 24px -8px rgba(15, 23, 42, 0.1),
+    0 0 0 1px rgba(249, 115, 22, 0.3);
+}
+
+.card-review-animated:active {
+  transform: translateY(-2px);
+}
+
+.star-glow {
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.35s ease;
+}
+.card-review-animated:hover .star-glow,
+.card-bouncy:hover .star-glow {
+  transform: scale(1.12);
+  filter: drop-shadow(0 2px 10px rgba(251, 191, 36, 0.95));
+}
+
+.quote-watermark {
+  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.45s ease, opacity 0.45s ease;
+}
+.card-review-animated:hover .quote-watermark,
+.card-bouncy:hover .quote-watermark {
+  transform: scale(1.3) rotate(-8deg) translate(4px, -4px);
+  color: rgba(249, 115, 22, 0.25);
+  opacity: 1;
+}
+
+/* Custom Dropdown Combobox Menu Animation */
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-dropdown {
+  animation: dropdownFadeIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transform-origin: top center;
+}
+
+/* Subtle Luxury Background Mesh */
+.bg-mesh-pattern {
+  background-image: radial-gradient(rgba(148, 163, 184, 0.22) 1.2px, transparent 1.2px);
+  background-size: 24px 24px;
+}
+
+.dark .bg-mesh-pattern {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1.2px, transparent 1.2px);
+}
+
+/* Section Luxury Card Wrapper */
+.luxury-section-box {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(226, 232, 240, 0.85);
+  border-radius: 2rem;
+  box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.05);
+}
+
+.dark .luxury-section-box {
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(51, 65, 85, 0.7);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.4);
+}
+
+
+/* Center Card Highlight for Behind Your Safe Ride */
+@keyframes centerBouncyFloat {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.center-card-bouncy {
+  animation: centerBouncyFloat 3.5s ease-in-out infinite;
+  box-shadow: 
+    0 25px 60px -12px rgba(249, 115, 22, 0.32),
+    0 12px 28px -6px rgba(15, 23, 42, 0.14),
+    0 0 0 2.5px rgba(249, 115, 22, 0.55) !important;
+  z-index: 20;
+}
+
+@keyframes slideProgress {
+  0% { width: 0%; }
+  100% { width: 100%; }
+}
+
+.animate-slide-progress {
+  animation: slideProgress 1s linear infinite;
+}
+
+/* 3D Staggered Stage */
+.stage-3d-perspective {
+  perspective: 1200px;
+  perspective-origin: center 45%;
+}
+
+@keyframes subtleImageBreath {
+  0%, 100% {
+    transform: scale(1.04);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+}
+
+.animate-subtle-zoom {
+  animation: subtleImageBreath 6s ease-in-out infinite;
+}
+
+/* Continuous Full-Page Vertical Floating Animation for WhatsApp across entire viewport */
+@keyframes whatsappVerticalFloat {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+    box-shadow: 0 10px 25px -4px rgba(37, 211, 102, 0.45);
+  }
+  25% {
+    transform: translateY(calc(-40vh + 45px)) rotate(3deg);
+    box-shadow: 0 22px 40px -6px rgba(37, 211, 102, 0.6);
+  }
+  50% {
+    transform: translateY(calc(-78vh + 80px)) rotate(-3deg);
+    box-shadow: 0 32px 55px -8px rgba(37, 211, 102, 0.7);
+  }
+  75% {
+    transform: translateY(calc(-38vh + 40px)) rotate(2deg);
+    box-shadow: 0 22px 40px -6px rgba(37, 211, 102, 0.6);
+  }
+  100% {
+    transform: translateY(0px) rotate(0deg);
+    box-shadow: 0 10px 25px -4px rgba(37, 211, 102, 0.45);
+  }
+}
+
+.animate-whatsapp-float-vertical {
+  animation: whatsappVerticalFloat 8.5s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+
+.animate-whatsapp-float-vertical:hover,
+.animate-whatsapp-float-vertical:focus-within {
+  animation-play-state: paused;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Featured Cars Center-Focus Stage Slider (Crystal-Sharp Text)
+   ───────────────────────────────────────────────────────────── */
+.featured-center-stage {
+  transform: translateZ(0);
+}
+
+.featured-stage-card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transition: transform 550ms cubic-bezier(0.25, 1, 0.5, 1),
+              opacity 550ms cubic-bezier(0.25, 1, 0.5, 1),
+              box-shadow 550ms cubic-bezier(0.25, 1, 0.5, 1),
+              border-color 400ms ease;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.featured-center-active {
+  border-color: rgba(249, 115, 22, 0.55) !important;
+  box-shadow: 0 24px 55px -12px rgba(249, 115, 22, 0.3),
+              0 12px 28px -6px rgba(15, 23, 42, 0.12),
+              0 0 0 2px rgba(249, 115, 22, 0.4) !important;
+}
+
+.featured-img-subtle-scale {
+  transition: transform 550ms cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.featured-center-active .featured-img-subtle-scale {
+  transform: scale(1.04);
+}
+
+.featured-content-stagger {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   DayPicker Theme (Matching carrentalexpress.in Theme)
+   ───────────────────────────────────────────────────────────── */
+.rdp-root {
+  --rdp-accent-color: #f97316;
+  --rdp-accent-background-color: #ffedd5;
+  --rdp-day-height: 2.25rem;
+  --rdp-day-width: 2.25rem;
+  margin: 0 !important;
+  width: 100% !important;
+}
+
+.rdp-months {
+  width: 100% !important;
+}
+
+.rdp-month {
+  width: 100% !important;
+}
+
+.rdp-month_grid {
+  width: 100% !important;
+  border-collapse: collapse !important;
+}
+
+.rdp-day {
+  width: 100% !important;
+  height: 2.25rem !important;
+  padding: 1px !important;
+  text-align: center !important;
+}
+
+.rdp-day_button {
+  width: 100% !important;
+  height: 2.25rem !important;
+  border-radius: 8px !important;
+  font-size: 0.8125rem !important;
+  font-weight: 600 !important;
+  color: #0f172a !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.2s ease !important;
+  border: none !important;
+  background: transparent;
+  cursor: pointer;
+}
+
+.rdp-day_button:hover:not([disabled]) {
+  background-color: #ffedd5 !important;
+  color: #ea580c !important;
+}
+
+.dark .rdp-day_button {
+  color: #f1f5f9 !important;
+}
+
+.dark .rdp-day_button:hover:not([disabled]) {
+  background-color: rgba(249, 115, 22, 0.2) !important;
+  color: #fb923c !important;
+}
+
+.dark .rdp-caption_label,
+.dark .rdp-nav_button,
+.dark .rdp-head_cell {
+  color: #e2e8f0 !important;
+}
+
+/* Selected range endpoints (Start & End) */
+.rdp-day.rdp-range_start .rdp-day_button,
+.rdp-day.rdp-range_end .rdp-day_button,
+.rdp-day.rdp-selected .rdp-day_button,
+.rdp-day[aria-selected="true"] .rdp-day_button {
+  background-color: #f97316 !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.35) !important;
+}
+
+/* Selected range middle */
+.rdp-day.rdp-range_middle .rdp-day_button {
+  background-color: #ffedd5 !important;
+  color: #c2410c !important;
+  font-weight: 600 !important;
+  border-radius: 0px !important;
+}
+
+.dark .rdp-day.rdp-range_middle .rdp-day_button {
+  background-color: rgba(249, 115, 22, 0.25) !important;
+  color: #fdba74 !important;
+}
+
+/* Today indicator */
+.rdp-day.rdp-today .rdp-day_button {
+  border: 1.5px solid #f97316 !important;
+  color: #ea580c !important;
+}
+
+.dark .rdp-day.rdp-today .rdp-day_button {
+  border: 1.5px solid #fb923c !important;
+  color: #fb923c !important;
+}
+
+.rdp-day.rdp-today.rdp-selected .rdp-day_button,
+.rdp-day.rdp-today.rdp-range_start .rdp-day_button,
+.rdp-day.rdp-today.rdp-range_end .rdp-day_button {
+  border: 1.5px solid #ffffff !important;
+  color: #ffffff !important;
+  background-color: #f97316 !important;
+}
+
+/* Disabled & booked dates */
+.rdp-day.rdp-disabled .rdp-day_button,
+.rdp-day_button[disabled] {
+  opacity: 0.25 !important;
+  text-decoration: line-through !important;
+  cursor: not-allowed !important;
+  color: #94a3b8 !important;
+  background: transparent !important;
+}
+
+.dark .rdp-day.rdp-disabled .rdp-day_button,
+.dark .rdp-day_button[disabled] {
+  color: #64748b !important;
+  opacity: 0.2 !important;
+}
+
+/* Outside month */
+.rdp-day.rdp-outside .rdp-day_button {
+  opacity: 0.2 !important;
+}
+

@@ -16,26 +16,7 @@ import brezzaImg from '../assets/cars/brezza.jpg'
 import grandVitaraImg from '../assets/cars/grand-vitara.jpg'
 
 export const cars: Car[] = [
-  // ── Budget Segment ─────────────────────────────────────
-  {
-    id: 'punch',
-    name: 'Tata Punch',
-    city: 'Delhi',
-    pricePerDay: 2000,
-    images: [punchImg],
-    seats: 5,
-    transmission: 'Manual',
-    fuel: 'Petrol',
-    year: 2024,
-    engineCC: '1199 cc',
-    mileage: '18.97 km/l',
-    description:
-      'The Tata Punch is a micro-SUV that combines SUV styling with city-friendly dimensions. Rugged, safe, and fun to drive — ideal for everyday commutes and weekend getaways.',
-    features: ['Touchscreen Infotainment', 'Auto Headlamps', 'Rain-Sensing Wipers', 'Dual Airbags', 'ABS + EBD', 'Harman Audio'],
-    bookedDates: [],
-  },
-
-  // ── Mid Segment (₹2,500/day) ────────────────────────────
+  // ── Featured Showcase Segment ────────────────────────────
   {
     id: 'glanza',
     name: 'Toyota Glanza',
@@ -43,11 +24,12 @@ export const cars: Car[] = [
     pricePerDay: 2500,
     images: [glanzaImg],
     seats: 5,
-    transmission: 'Automatic',
+    transmission: 'Manual',
     fuel: 'Petrol',
     year: 2024,
     engineCC: '1197 cc',
     mileage: '22.35 km/l',
+    rating: 4.8,
     description:
       'The Toyota Glanza is a premium hatchback with Toyota reliability and a feature-rich cabin. Perfect for city drives and long highway cruises alike.',
     features: ['HUD Display', '360° Camera', 'Wireless Charging', 'OTA Updates', '6 Airbags', 'Toyota Connected'],
@@ -60,11 +42,12 @@ export const cars: Car[] = [
     pricePerDay: 2500,
     images: [balenoImg],
     seats: 5,
-    transmission: 'Automatic',
+    transmission: 'Manual',
     fuel: 'Petrol',
     year: 2024,
     engineCC: '1197 cc',
-    mileage: '22.35 km/l',
+    mileage: '21.5 km/l',
+    rating: 4.6,
     description:
       'The Maruti Baleno is a premium hatchback with a spacious cabin, modern design, and feature-packed interior. Ideal for families and long drives.',
     features: ['360° Camera', 'HUD Display', 'Wireless Charging', 'Sunroof', '6 Airbags', 'Lane Departure Warning'],
@@ -77,11 +60,12 @@ export const cars: Car[] = [
     pricePerDay: 2500,
     images: [fronxImg],
     seats: 5,
-    transmission: 'Automatic',
+    transmission: 'Manual',
     fuel: 'Petrol',
     year: 2024,
     engineCC: '1197 cc',
-    mileage: '21.5 km/l',
+    mileage: '22.3 km/l',
+    rating: 4.7,
     description:
       'The Maruti Fronx is a stylish coupe-SUV that blends sporty design with practicality. Its turbo-petrol engine and premium cabin make every drive exciting.',
     features: ['Turbo Boosterjet Engine', 'HUD Display', 'Wireless CarPlay', 'Sunroof', '6 Airbags', 'Cruise Control'],
@@ -99,9 +83,28 @@ export const cars: Car[] = [
     year: 2024,
     engineCC: '1197 cc',
     mileage: '23.20 km/l',
+    rating: 4.8,
     description:
       'The all-new Maruti Swift is India\'s favourite hatchback — sporty, fuel-efficient, and loaded with tech. Perfect for zipping through city traffic.',
-    features: ['Touchscreen Infotainment', 'Rear AC Vents', 'Keyless Entry', 'ABS + EBD', 'Dual Airbags', 'Auto Gear Shift (AGS)'],
+    features: ['Touchscreen Infotainment', 'Rear AC Vents', 'Keyless Entry', 'ABS + EBD', 'Dual Airbags', 'Apple CarPlay & Android Auto'],
+    bookedDates: [],
+  },
+  {
+    id: 'punch',
+    name: 'Tata Punch',
+    city: 'Delhi',
+    pricePerDay: 2000,
+    images: [punchImg],
+    seats: 5,
+    transmission: 'Manual',
+    fuel: 'Petrol',
+    year: 2024,
+    engineCC: '1199 cc',
+    mileage: '18.97 km/l',
+    rating: 4.7,
+    description:
+      'The Tata Punch is a micro-SUV that combines SUV styling with city-friendly dimensions. Rugged, safe, and fun to drive — ideal for everyday commutes and weekend getaways.',
+    features: ['Touchscreen Infotainment', 'Auto Headlamps', 'Rain-Sensing Wipers', 'Dual Airbags', 'ABS + EBD', 'Harman Audio'],
     bookedDates: [],
   },
   {
@@ -116,6 +119,7 @@ export const cars: Car[] = [
     year: 2024,
     engineCC: '1199 cc',
     mileage: '22.0 km/l',
+    rating: 4.6,
     description:
       'The Tata Altroz is a 5-star safety rated premium hatchback with a spacious cabin and refined ride quality. A perfect blend of style and substance.',
     features: ['iRA Connected Car', '7" Touchscreen', 'Auto AC', 'Projector Headlamps', 'Dual Airbags', '5-Star GNCAP Safety'],
@@ -135,6 +139,7 @@ export const cars: Car[] = [
     year: 2024,
     engineCC: '2184 cc',
     mileage: '15.2 km/l',
+    rating: 4.9,
     description:
       'The Mahindra Thar is an iconic off-road SUV that\'s equally at home on beach trails and mountain paths. With a removable roof, 4WD, and rugged build, it\'s the ultimate adventure vehicle.',
     features: ['4WD with Low Range', 'Removable Roof & Doors', 'Waterproof Interior', 'Touchscreen Infotainment', 'Dual Airbags', 'Sway Bar Disconnect'],
@@ -152,6 +157,7 @@ export const cars: Car[] = [
     year: 2024,
     engineCC: '1462 cc',
     mileage: '16.94 km/l',
+    rating: 4.7,
     description:
       'The Maruti Jimny is a compact off-roader with legendary 4WD capability. Light, agile, and adventure-ready, it conquers trails that bigger SUVs can\'t.',
     features: ['AllGrip Pro 4WD', 'Ladder-Frame Chassis', 'Hill Hold & Descent', 'Touchscreen Infotainment', 'Dual Airbags', 'ESP + Brake Assist'],
@@ -169,6 +175,7 @@ export const cars: Car[] = [
     year: 2024,
     engineCC: '2184 cc',
     mileage: '15.4 km/l',
+    rating: 4.8,
     description:
       'The Mahindra Scorpio Classic is the tried-and-true workhorse — rugged, spacious, and built for Indian roads. A commanding presence on any terrain.',
     features: ['mHawk Diesel Engine', 'Captain Seats', 'Micro-Hybrid Tech', 'Touchscreen Infotainment', 'Dual Airbags', 'Follow-Me-Home Headlamps'],
@@ -183,11 +190,12 @@ export const cars: Car[] = [
     pricePerDay: 5500,
     images: [safariImg],
     seats: 7,
-    transmission: 'Automatic',
+    transmission: 'Manual',
     fuel: 'Diesel',
     year: 2024,
     engineCC: '1956 cc',
     mileage: '14.5 km/l',
+    rating: 4.8,
     description:
       'The Tata Safari is a flagship 7-seater SUV with a luxurious cabin, panoramic sunroof, and commanding road presence. Perfect for family road trips.',
     features: ['Panoramic Sunroof', 'JBL Sound System', 'Ventilated Seats', 'ADAS Suite', '6 Airbags', 'Terrain Modes'],
@@ -200,11 +208,12 @@ export const cars: Car[] = [
     pricePerDay: 6000,
     images: [tharRoxxImg],
     seats: 5,
-    transmission: 'Automatic',
+    transmission: 'Manual',
     fuel: 'Diesel',
     year: 2024,
     engineCC: '2184 cc',
     mileage: '15.2 km/l',
+    rating: 4.9,
     description:
       'The Mahindra Thar Roxx is the evolved, 5-door version of the iconic Thar — combining off-road DNA with premium comfort, a spacious cabin, and cutting-edge tech.',
     features: ['4WD with Terrain Modes', 'Panoramic Sunroof', 'Adrenox Connected', 'Dual 10.25" Screens', '6 Airbags', 'Level 2 ADAS'],
@@ -217,11 +226,12 @@ export const cars: Car[] = [
     pricePerDay: 6000,
     images: [scorpioNImg],
     seats: 7,
-    transmission: 'Automatic',
+    transmission: 'Manual',
     fuel: 'Diesel',
     year: 2024,
     engineCC: '2184 cc',
     mileage: '15.2 km/l',
+    rating: 4.9,
     description:
       'The Mahindra Scorpio N is a bold, body-on-frame SUV built for adventure. With a powerful diesel engine, 4WD option, and commanding stance, it dominates both city roads and rough terrain.',
     features: ['4WD with Low Range', 'Sony Sound System', 'Wireless Charging', 'Sunroof', '6 Airbags', 'Terrain Modes'],
@@ -234,11 +244,12 @@ export const cars: Car[] = [
     pricePerDay: 2700,
     images: [brezzaImg],
     seats: 5,
-    transmission: 'Automatic',
+    transmission: 'Manual',
     fuel: 'Petrol',
     year: 2024,
     engineCC: '1462 cc',
     mileage: '19.8 km/l',
+    rating: 4.7,
     description:
       'The Maruti Brezza is a compact SUV with bold styling, advanced features, and a comfortable ride. Perfect for city and highway drives.',
     features: ['Sunroof', 'Cruise Control', '6 Airbags', 'SmartPlay Pro+', 'ABS + EBD'],
@@ -251,11 +262,12 @@ export const cars: Car[] = [
     pricePerDay: 3000,
     images: [grandVitaraImg],
     seats: 5,
-    transmission: 'Automatic',
+    transmission: 'Manual',
     fuel: 'Hybrid',
     year: 2024,
     engineCC: '1490 cc',
     mileage: '27.97 km/l',
+    rating: 4.8,
     description:
       'The Maruti Grand Vitara is a premium SUV with hybrid technology, luxurious interiors, and exceptional fuel efficiency. Ideal for long journeys.',
     features: ['Panoramic Sunroof', '360° Camera', 'Wireless Charging', '6 Airbags', 'All-Wheel Drive'],

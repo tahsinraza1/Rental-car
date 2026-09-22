@@ -50,6 +50,34 @@ export function lookupAvailability(carId: string, carName: string, rows: SheetRo
   return row?.Availability?.trim() ?? 'Available'
 }
 
+export function isCarAvailable(availability?: string): boolean {
+  if (!availability) return true
+  const norm = availability.trim().toLowerCase()
+  if (
+    norm.includes('unavail') ||
+    norm.includes('unabiable') ||
+    norm.includes('book') ||
+    norm.includes('not') ||
+    norm.includes('busy') ||
+    norm.includes('reserved') ||
+    norm.includes('sold') ||
+    norm === 'no' ||
+    norm === 'false' ||
+    norm === '0'
+  ) {
+    return false
+  }
+  return true
+}
+
+export function getCarStatusDisplay(availability?: string): { isAvailable: boolean; label: string } {
+  const available = isCarAvailable(availability)
+  return {
+    isAvailable: available,
+    label: available ? 'AVAILABLE' : 'BOOKED',
+  }
+}
+
 export function lookupPrice(carId: string, carName: string, rows: SheetRow[]) {
   const row = lookupSheetRow(carId, carName, rows)
   const rawPrice = row ? (row['Price '] ?? row.Price ?? '') : ''

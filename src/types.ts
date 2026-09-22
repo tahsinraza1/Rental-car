@@ -23,6 +23,7 @@ export type Car = {
   mileage?: string
   engineCC?: string
   year?: number
+  rating?: number
 }
 
 export type BookingDraft = {

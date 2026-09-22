@@ -18,7 +18,6 @@ export function CarsPage() {
     if (availabilityFilter !== 'All') {
       const isFilterAvailable = availabilityFilter === 'Available'
       result = result.filter((c) => {
-        // Use live sheet availability if loaded, otherwise assume available
         const status = sheetLoading ? 'Available' : lookupAvailability(c.id, c.name, sheetRows)
         const isCarAvailable = status.trim().toLowerCase() !== 'unavailable'
         return isFilterAvailable ? isCarAvailable : !isCarAvailable
@@ -30,7 +29,7 @@ export function CarsPage() {
     return result
   }, [q, availabilityFilter, sortBy, sheetRows, sheetLoading])
 
-  const hasFilters = q !== '' || availabilityFilter !== 'All'
+  const hasFilters = q !== '' || availabilityFilter !== 'All' || sortBy !== 'price-asc'
 
   function clearFilters() {
     setQ('')
@@ -40,109 +39,115 @@ export function CarsPage() {
 
   return (
     <div className="grid gap-8">
-      {/* Header */}
-      <div>
-        <div className="inline-flex items-center gap-2 rounded-full border border-orange-200 bg-orange-50 px-3 py-1 text-xs font-bold text-orange-600 mb-3">
-          Our Fleet
-        </div>
-        <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
-          <div>
-            <h1 className="text-3xl font-black text-slate-900">All Cars</h1>
-            <p className="mt-1 text-sm text-slate-500">
-              {filtered.length} car{filtered.length !== 1 ? 's' : ''} available · Pick your dates on the car page
-            </p>
+      {/* Page Header */}
+      <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+        <div>
+          <div className="mb-2.5 inline-flex items-center gap-1.5 rounded-full border border-orange-200/90 dark:border-orange-800/60 bg-orange-50 dark:bg-orange-950/40 px-3.5 py-1 text-xs font-bold text-orange-600 dark:text-orange-400 shadow-2xs">
+            <span className="size-1.5 rounded-full bg-orange-500 animate-pulse" />
+            Delhi & Noida Fleet
           </div>
+          <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-900 dark:text-white leading-tight">
+            Explore All <span className="bg-gradient-to-r from-orange-500 via-amber-500 to-rose-500 bg-clip-text text-transparent">Vehicles</span>
+          </h1>
+          <p className="mt-2 text-sm font-medium text-slate-500 dark:text-slate-400">
+            {filtered.length} vehicle{filtered.length !== 1 ? 's' : ''} available · Clean cars, zero hidden fees & live WhatsApp booking
+          </p>
         </div>
       </div>
 
-      {/* Filters */}
-      <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {/* Search */}
-          <div className="lg:col-span-2">
-            <label className="grid gap-1.5">
-              <span className="text-xs font-semibold text-slate-600">Search</span>
-              <div className="relative">
-                <svg className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-                </svg>
-                <input
-                  value={q}
-                  onChange={(e) => setQ(e.target.value)}
-                  placeholder="Search by name..."
-                  className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 pl-9 pr-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-400/50 focus:border-orange-300 transition"
-                />
-              </div>
-            </label>
+      {/* Sticky Filter & Search Control Bar */}
+      <div className="sticky top-[52px] z-30 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 p-3.5 shadow-md shadow-slate-200/50 dark:shadow-slate-950/50 backdrop-blur-xl md:p-4 transition-colors duration-300">
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
+          {/* Search Input */}
+          <div className="relative min-w-0 flex-1">
+            <svg
+              className="absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-slate-400 dark:text-slate-500"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+            </svg>
+            <input
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder="Search by car name (e.g. Thar, Scorpio, Creta)..."
+              className="h-10 w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/60 pl-10 pr-9 text-sm font-medium text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 transition duration-300 focus:border-accent focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-accent/20"
+            />
+            {q && (
+              <button
+                onClick={() => setQ('')}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 text-xs font-bold"
+              >
+                ✕
+              </button>
+            )}
           </div>
 
-          {/* Availability */}
-          <label className="grid gap-1.5">
-            <span className="text-xs font-semibold text-slate-600">Availability</span>
-            <select
-              value={availabilityFilter}
-              onChange={(e) => setAvailabilityFilter(e.target.value)}
-              className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-400/50 focus:border-orange-300 transition"
-            >
-              {availabilities.map((a) => <option key={a} value={a}>{a}</option>)}
-            </select>
-          </label>
-        </div>
+          {/* Availability Pills */}
+          <div className="flex flex-wrap items-center gap-1.5">
+            {availabilities.map((a) => (
+              <button
+                key={a}
+                onClick={() => setAvailabilityFilter(a)}
+                className={`rounded-xl px-3.5 py-2 text-xs font-bold transition duration-300 ${
+                  availabilityFilter === a
+                    ? 'bg-accent text-white shadow-md shadow-accent/25'
+                    : 'border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-accent hover:border-slate-300 dark:hover:border-slate-600'
+                }`}
+              >
+                {a}
+              </button>
+            ))}
+          </div>
 
-        {/* Sort + clear */}
-        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 pt-4">
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-slate-500">Sort by:</span>
-            <div className="flex gap-1">
-              {([
-                { value: 'price-asc', label: 'Price ↑' },
-                { value: 'price-desc', label: 'Price ↓' },
-                { value: 'name', label: 'Name' },
-              ] as const).map((opt) => (
-                <button
-                  key={opt.value}
-                  onClick={() => setSortBy(opt.value)}
-                  className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition ${
-                    sortBy === opt.value
-                      ? 'bg-orange-500 text-white shadow-sm'
-                      : 'border border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
-                  }`}
-                >
-                  {opt.label}
-                </button>
-              ))}
-            </div>
+          {/* Sort Buttons */}
+          <div className="flex flex-wrap items-center gap-1.5 lg:ml-auto">
+            {([
+              { value: 'price-asc', label: 'Price: Low to High' },
+              { value: 'price-desc', label: 'Price: High to Low' },
+              { value: 'name', label: 'Name A–Z' },
+            ] as const).map((opt) => (
+              <button
+                key={opt.value}
+                onClick={() => setSortBy(opt.value)}
+                className={`rounded-xl px-3.5 py-2 text-xs font-bold transition duration-300 ${
+                  sortBy === opt.value
+                    ? 'bg-accent text-white shadow-md shadow-accent/25'
+                    : 'border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-accent hover:border-slate-300 dark:hover:border-slate-600'
+                }`}
+              >
+                {opt.label}
+              </button>
+            ))}
           </div>
 
           {hasFilters && (
             <button
               onClick={clearFilters}
-              className="flex items-center gap-1.5 text-xs text-slate-500 hover:text-slate-900 transition"
+              className="text-xs font-bold text-accent hover:text-accent-dark transition underline underline-offset-2 ml-1 cursor-pointer"
             >
-              <svg className="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-              Clear filters
+              Reset Filters
             </button>
           )}
         </div>
       </div>
 
-      {/* Results */}
+      {/* Grid of Car Cards */}
       {filtered.length === 0 ? (
-        <div className="flex flex-col items-center justify-center gap-4 rounded-2xl border border-slate-200 bg-white py-20 text-center shadow-sm">
-          <div className="text-4xl">🔍</div>
-          <div className="text-lg font-bold text-slate-900">No cars found</div>
-          <div className="text-sm text-slate-500">Try adjusting your filters or search term.</div>
+        <div className="flex flex-col items-center justify-center gap-3 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-20 text-center shadow-xs">
+          <div className="font-display text-2xl font-bold text-slate-900 dark:text-white">No Vehicles Match Your Search</div>
+          <div className="text-sm text-slate-500 dark:text-slate-400 font-medium">Try clearing your search query or selecting "All" availability.</div>
           <button
             onClick={clearFilters}
-            className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100 transition"
+            className="mt-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-5 py-2.5 text-sm font-bold text-slate-900 dark:text-white transition hover:bg-slate-100 dark:hover:bg-slate-700"
           >
             Clear all filters
           </button>
         </div>
       ) : (
-        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 md:gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 py-3">
           {filtered.map((car) => (
             <CarCard
               key={car.id}

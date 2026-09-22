@@ -8,13 +8,14 @@ export function Card({ className, variant = 'default', ...props }: CardProps) {
   return (
     <div
       className={cn(
-        'rounded-2xl border',
-        variant === 'default' && 'border-slate-200 bg-white shadow-sm',
-        variant === 'glass'   && 'border-slate-200/60 bg-white/80 backdrop-blur-sm shadow-sm',
-        variant === 'solid'   && 'border-slate-200 bg-slate-50',
+        'rounded-3xl border transition-colors duration-300',
+        variant === 'default' && 'border-black/10 dark:border-white/10 bg-white dark:bg-slate-900',
+        variant === 'glass'   && 'border-black/10 dark:border-white/10 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm',
+        variant === 'solid'   && 'border-black/10 dark:border-white/10 bg-cream dark:bg-slate-950',
         className,
       )}
       {...props}
     />
   )
 }
+
