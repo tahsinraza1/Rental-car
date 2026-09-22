@@ -5,6 +5,9 @@ import {
   sendPasswordResetEmail,
   signOut as firebaseSignOut,
   onAuthStateChanged,
+  setPersistence,
+  browserLocalPersistence,
+  browserSessionPersistence,
   type User,
 } from 'firebase/auth'
 import { auth } from '../lib/firebase'
@@ -13,9 +16,10 @@ import {
   approveReview,
   rejectReview,
   deleteReview,
+  verifyAdminRole,
   type CustomerReview,
 } from '../services/reviewService'
-import { ADMIN_EMAIL, ADMIN_PASSWORD, VALID_ADMIN_ACCOUNTS, OWNER_WHATSAPP_NUMBER } from '../config'
+import { OWNER_WHATSAPP_NUMBER } from '../config'
 import { useTheme } from '../context/ThemeContext'
 import brandLogo from '../assets/logo.png'
 import adminLoginBg from '../assets/admin_login_bg.jpg'
@@ -26,16 +30,11 @@ type ViewMode = 'cards' | 'table'
 export function AdminDashboardPage() {
   const { theme, toggleTheme } = useTheme()
 
-  // ── Authentication State (Firebase Auth + Fallback) ──
+  // ── Authentication State (Firebase Auth + Firestore Role Verification) ──
   const [currentUser, setCurrentUser] = useState<User | null>(() => auth.currentUser)
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
-    return (
-      auth.currentUser !== null ||
-      sessionStorage.getItem('cre_admin_session') === 'true' ||
-      localStorage.getItem('cre_admin_session') === 'true'
-    )
-  })
-  const [nameInput, setNameInput] = useState(() => localStorage.getItem('cre_admin_name') || '')
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
+  const [isAuthChecking, setIsAuthChecking] = useState<boolean>(true)
+  const [adminProfileName, setAdminProfileName] = useState<string>('')
   const [emailInput, setEmailInput] = useState('')
   const [passwordInput, setPasswordInput] = useState('')
   const [rememberMe, setRememberMe] = useState(true)
@@ -50,13 +49,35 @@ export function AdminDashboardPage() {
   const [resetSent, setResetSent] = useState(false)
   const [forgotError, setForgotError] = useState('')
 
-  // ── Listen to Firebase Auth state changes ──
+  // ── Listen to Firebase Auth state changes & verify Firestore Admin Role ──
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setCurrentUser(user)
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        setIsAuthenticated(true)
+        setCurrentUser(user)
+        try {
+          const { isAdmin, name } = await verifyAdminRole(user.uid)
+          if (isAdmin) {
+            setIsAuthenticated(true)
+            if (name) setAdminProfileName(name)
+          } else {
+            console.warn('Authenticated user does not have admin role in Firestore users/{uid}.')
+            await firebaseSignOut(auth)
+            setCurrentUser(null)
+            setIsAuthenticated(false)
+            setLoginError('Access denied: Your account does not have administrator privileges.')
+          }
+        } catch (err) {
+          console.warn('Role verification error:', err)
+          await firebaseSignOut(auth)
+          setCurrentUser(null)
+          setIsAuthenticated(false)
+          setLoginError('Access verification failed. Please try signing in again.')
+        }
+      } else {
+        setCurrentUser(null)
+        setIsAuthenticated(false)
       }
+      setIsAuthChecking(false)
     })
     return () => unsubscribe()
   }, [])
@@ -101,13 +122,11 @@ export function AdminDashboardPage() {
 
   // Effective Logged-in Admin Name
   const effectiveAdminName = useMemo(() => {
-    const stored = localStorage.getItem('cre_admin_name') || sessionStorage.getItem('cre_admin_name')
-    if (stored && stored.trim()) return stored.trim()
-    if (nameInput && nameInput.trim()) return nameInput.trim()
-    if (currentUser?.displayName) return currentUser.displayName
+    if (adminProfileName && adminProfileName.trim()) return adminProfileName.trim()
+    if (currentUser?.displayName && currentUser.displayName.trim()) return currentUser.displayName.trim()
     if (currentUser?.email) return currentUser.email.split('@')[0]
     return 'Admin'
-  }, [nameInput, currentUser])
+  }, [adminProfileName, currentUser])
 
   // Dynamic Time-of-Day Greeting with Motivational Quote
   const greetingInfo = useMemo(() => {
@@ -203,71 +222,67 @@ export function AdminDashboardPage() {
     return () => unsubscribe()
   }, [isAuthenticated])
 
-  // ── Login Handler with Firebase Auth + Credentials Fallback ──
+  // ── Login Handler with Firebase Auth Only + Firestore Role Verification ──
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault()
     setLoginError('')
     setIsLoggingIn(true)
 
-    const cleanName = nameInput.trim() || 'Admin'
     const cleanEmail = emailInput.trim().toLowerCase()
     const cleanPassword = passwordInput.trim()
 
+    if (!cleanEmail || !cleanPassword) {
+      setLoginError('Please enter both Email and Password.')
+      setIsLoggingIn(false)
+      return
+    }
+
     try {
-      // 1. Attempt Sign-in via Firebase Authentication
+      // 1. Configure Firebase Auth Persistence based on Remember Me
+      await setPersistence(
+        auth,
+        rememberMe ? browserLocalPersistence : browserSessionPersistence
+      )
+
+      // 2. Authenticate strictly via Firebase Authentication
       const userCredential = await signInWithEmailAndPassword(auth, cleanEmail, cleanPassword)
-      setCurrentUser(userCredential.user)
-      if (rememberMe) {
-        sessionStorage.setItem('cre_admin_session', 'true')
-        sessionStorage.setItem('cre_admin_name', cleanName)
-        localStorage.setItem('cre_admin_session', 'true')
-        localStorage.setItem('cre_admin_name', cleanName)
-      } else {
-        sessionStorage.setItem('cre_admin_session', 'true')
-        sessionStorage.setItem('cre_admin_name', cleanName)
+      const user = userCredential.user
+
+      // 3. Verify Admin Role in Firestore users/{uid}
+      const { isAdmin, name } = await verifyAdminRole(user.uid)
+      if (!isAdmin) {
+        await firebaseSignOut(auth)
+        setCurrentUser(null)
+        setIsAuthenticated(false)
+        setLoginError('Access denied: Your account does not have administrator privileges.')
+        return
       }
+
+      setCurrentUser(user)
+      if (name) setAdminProfileName(name)
       setIsAuthenticated(true)
-      setToastMessage({ text: `Welcome back, ${cleanName}! Logged in via Firebase.`, type: 'success' })
+      setToastMessage({
+        text: `Welcome back, ${name || user.displayName || cleanEmail}! Logged in as Administrator.`,
+        type: 'success',
+      })
     } catch (fbError: any) {
-      console.warn('Firebase sign-in attempt:', fbError?.code || fbError?.message)
+      console.warn('Firebase authentication error:', fbError?.code)
 
-      // 2. Fallback check for offline/configured admin credentials
-      const isMatch =
-        VALID_ADMIN_ACCOUNTS.some(
-          (acc) => acc.email.toLowerCase() === cleanEmail && acc.password === cleanPassword
-        ) ||
-        (cleanEmail === ADMIN_EMAIL.toLowerCase() && cleanPassword === ADMIN_PASSWORD) ||
-        (cleanEmail === 'faizan@admin' && cleanPassword === 'creadmin2026') ||
-        (cleanEmail === 'admin@carrentalexpress.in' && cleanPassword === 'creadmin2026') ||
-        (cleanEmail.includes('faizan') && cleanPassword === 'creadmin2026')
-
-      if (isMatch) {
-        if (rememberMe) {
-          sessionStorage.setItem('cre_admin_session', 'true')
-          sessionStorage.setItem('cre_admin_name', cleanName)
-          localStorage.setItem('cre_admin_session', 'true')
-          localStorage.setItem('cre_admin_name', cleanName)
-        } else {
-          sessionStorage.setItem('cre_admin_session', 'true')
-          sessionStorage.setItem('cre_admin_name', cleanName)
-        }
-        setIsAuthenticated(true)
-        setToastMessage({ text: `Welcome back, ${cleanName}! Admin session active.`, type: 'success' })
+      // Map Firebase Auth error codes safely
+      if (
+        fbError?.code === 'auth/invalid-credential' ||
+        fbError?.code === 'auth/wrong-password' ||
+        fbError?.code === 'auth/user-not-found'
+      ) {
+        setLoginError('Invalid Email ID or Password! Please check your credentials.')
+      } else if (fbError?.code === 'auth/invalid-email') {
+        setLoginError('Please enter a valid email address format.')
+      } else if (fbError?.code === 'auth/user-disabled') {
+        setLoginError('This administrator account has been disabled. Please contact support.')
+      } else if (fbError?.code === 'auth/too-many-requests') {
+        setLoginError('Too many failed attempts. Please wait a moment or reset your password.')
       } else {
-        // Map error codes to clean user-friendly messages
-        if (
-          fbError?.code === 'auth/invalid-credential' ||
-          fbError?.code === 'auth/wrong-password' ||
-          fbError?.code === 'auth/user-not-found'
-        ) {
-          setLoginError('Invalid Email ID or Password! Please check your credentials.')
-        } else if (fbError?.code === 'auth/invalid-email') {
-          setLoginError('Please enter a valid email address format.')
-        } else if (fbError?.code === 'auth/too-many-requests') {
-          setLoginError('Too many failed attempts. Please wait a moment or reset your password.')
-        } else {
-          setLoginError('Invalid Email ID or Password! Please check your credentials.')
-        }
+        setLoginError('Authentication failed. Please check your credentials.')
       }
     } finally {
       setIsLoggingIn(false)
@@ -290,17 +305,15 @@ export function AdminDashboardPage() {
       setResetSent(true)
       setToastMessage({ text: `Firebase password reset link sent to ${targetEmail}!`, type: 'success' })
     } catch (err: any) {
-      console.warn('Firebase reset email error:', err?.code, err?.message)
-      if (err?.code === 'auth/user-not-found') {
-        setForgotError('No administrator account found with this email in Firebase.')
-      } else if (err?.code === 'auth/invalid-email') {
+      console.warn('Firebase reset email notice:', err?.code)
+      if (err?.code === 'auth/invalid-email') {
         setForgotError('Please enter a valid email address format.')
       } else if (err?.code === 'auth/too-many-requests') {
         setForgotError('Too many requests. Please wait a few minutes before trying again.')
       } else {
-        // Fallback for demo/offline setup
+        // Safe generic message to prevent email enumeration
         setResetSent(true)
-        setToastMessage({ text: `Password reset request dispatched for ${targetEmail}.`, type: 'info' })
+        setToastMessage({ text: `If registered, a password reset link has been dispatched to ${targetEmail}.`, type: 'info' })
       }
     } finally {
       setIsSendingReset(false)
@@ -314,15 +327,12 @@ export function AdminDashboardPage() {
     } catch (err) {
       console.error('Firebase signout error:', err)
     }
-    sessionStorage.removeItem('cre_admin_session')
-    sessionStorage.removeItem('cre_admin_name')
-    localStorage.removeItem('cre_admin_session')
-    localStorage.removeItem('cre_admin_name')
     setIsAuthenticated(false)
     setCurrentUser(null)
-    setNameInput('')
+    setAdminProfileName('')
     setEmailInput('')
     setPasswordInput('')
+    setShowLogoutModal(false)
     setToastMessage({ text: 'Logged out successfully.', type: 'info' })
   }
 
@@ -427,6 +437,25 @@ export function AdminDashboardPage() {
       return dateB - dateA
     })
   }, [reviews, filterStatus, searchQuery])
+
+  // ─────────────────────────────────────────────────────────────
+  // 0. AUTH CHECKING LOADING SCREEN
+  // ─────────────────────────────────────────────────────────────
+  if (isAuthChecking) {
+    return (
+      <div className="h-screen w-full flex flex-col items-center justify-center bg-slate-950 text-white select-none">
+        <img
+          src={brandLogo}
+          alt="Car Rental Express"
+          className="h-10 w-auto object-contain mb-4 animate-pulse drop-shadow-lg"
+        />
+        <div className="flex items-center gap-2.5 text-xs font-bold text-orange-400 tracking-wider uppercase">
+          <span className="size-4 border-2 border-orange-400 border-t-transparent rounded-full animate-spin" />
+          <span>Verifying Admin Access...</span>
+        </div>
+      </div>
+    )
+  }
 
   // ─────────────────────────────────────────────────────────────
   // 1. REFINED LUXURY LOGIN SCREEN (SAME AS USER MOCKUP IMAGE)
@@ -566,34 +595,9 @@ export function AdminDashboardPage() {
                 )}
 
                 {/* Login Form */}
-                <form onSubmit={handleLogin} className="space-y-3">
+                <form onSubmit={handleLogin} className="space-y-3.5">
                   
-                  {/* Field 1: Administrator Name */}
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">
-                      Administrator Name
-                    </label>
-                    <div className="relative rounded-xl border border-slate-700/90 bg-slate-900/90 focus-within:border-orange-500 focus-within:ring-2 focus-within:ring-orange-500/20 transition-all">
-                      <div className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400">
-                        <svg className="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
-                        </svg>
-                      </div>
-                      <input
-                        type="text"
-                        value={nameInput}
-                        onChange={(e) => {
-                          setNameInput(e.target.value)
-                          setLoginError('')
-                        }}
-                        placeholder="Faizan Ahmad"
-                        required
-                        className="w-full bg-transparent text-white pl-10 pr-3.5 py-2 text-xs sm:text-sm font-medium focus:outline-none placeholder-slate-500"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Field 2: Administrator Email ID */}
+                  {/* Field 1: Administrator Email ID */}
                   <div>
                     <label className="block text-xs font-semibold text-slate-300 mb-1">
                       Administrator Email ID
@@ -611,14 +615,14 @@ export function AdminDashboardPage() {
                           setEmailInput(e.target.value)
                           setLoginError('')
                         }}
-                        placeholder="faizan@carrentalexpress.in"
+                        placeholder="admin@carrentalexpress.in"
                         required
-                        className="w-full bg-transparent text-white pl-10 pr-3.5 py-2 text-xs sm:text-sm font-medium focus:outline-none placeholder-slate-500"
+                        className="w-full bg-transparent text-white pl-10 pr-3.5 py-2.5 text-xs sm:text-sm font-medium focus:outline-none placeholder-slate-500"
                       />
                     </div>
                   </div>
 
-                  {/* Field 3: Password */}
+                  {/* Field 2: Password */}
                   <div>
                     <label className="block text-xs font-semibold text-slate-300 mb-1">
                       Password
@@ -957,10 +961,10 @@ export function AdminDashboardPage() {
           {/* Quick Header Actions */}
           <div className="flex items-center gap-2.5 sm:gap-3">
             {/* Logged-in Admin User Badge */}
-            {(nameInput || localStorage.getItem('cre_admin_name') || currentUser?.email) && (
+            {currentUser && (
               <div className="hidden md:flex items-center gap-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-3 py-1.5 text-xs text-slate-600 dark:text-slate-300 font-medium">
                 <span className="size-2 rounded-full bg-emerald-500" />
-                <span className="max-w-[150px] truncate">{nameInput || localStorage.getItem('cre_admin_name') || currentUser?.displayName || currentUser?.email}</span>
+                <span className="max-w-[150px] truncate">{effectiveAdminName}</span>
               </div>
             )}
 

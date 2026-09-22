@@ -2,6 +2,7 @@ import {
   collection,
   addDoc,
   doc,
+  getDoc,
   updateDoc,
   deleteDoc,
   query,
@@ -195,4 +196,28 @@ export async function rejectReview(reviewId: string): Promise<void> {
 export async function deleteReview(reviewId: string): Promise<void> {
   const reviewRef = doc(db, FEEDBACKS_COLLECTION, reviewId)
   await deleteDoc(reviewRef)
+}
+
+/**
+ * Verify whether an authenticated Firebase UID has the 'admin' role in Firestore.
+ * Expected structure: users/{uid} => { email: string, role: "admin", name?: string }
+ */
+export async function verifyAdminRole(uid: string): Promise<{ isAdmin: boolean; name?: string; email?: string }> {
+  if (!uid) return { isAdmin: false }
+  try {
+    const userRef = doc(db, 'users', uid)
+    const snap = await getDoc(userRef)
+    if (snap.exists()) {
+      const data = snap.data()
+      return {
+        isAdmin: data?.role === 'admin',
+        name: data?.name || data?.displayName || '',
+        email: data?.email || '',
+      }
+    }
+    return { isAdmin: false }
+  } catch (err) {
+    console.warn('Firestore admin verification query error:', err)
+    return { isAdmin: false }
+  }
 }

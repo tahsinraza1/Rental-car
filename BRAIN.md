@@ -142,7 +142,7 @@ Rental-car/
   3. Admin logs into `/admin` $\rightarrow$ views all reviews via `subscribeToAllReviews()`.
   4. Admin clicks **Approve** (`approveReview()`) $\rightarrow$ sets `status: 'approved'` & `approvedAt`, instantly publishing to live site.
   5. Admin clicks **Reject** (`rejectReview()`) $\rightarrow$ sets `status: 'rejected'` & `rejectedAt`, moving to archive.
-* **Admin Credentials**: Configured in `src/config.ts` (`ADMIN_EMAIL = 'faizan@carrentalexpress.in'`, `ADMIN_PASSWORD = 'creadmin2026'`). Also supports `faizan@admin` and `admin@carrentalexpress.in`.
+* **Admin Authentication**: Enforced exclusively via Firebase Authentication (`signInWithEmailAndPassword`) and Firestore role verification (`users/{uid}.role == 'admin'`). No hardcoded credentials or local bypasses.
 
 ### C. WhatsApp Booking Engine (`src/lib/whatsapp.ts`, `src/config.ts`)
 * **Global Owner WhatsApp**: `918796178177` (Configured in `src/config.ts`).

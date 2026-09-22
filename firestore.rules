@@ -1,0 +1,41 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ─────────────────────────────────────────────────────────────
+    // Helper function: verify authenticated user has role == 'admin'
+    // in the Firestore /users/{uid} collection.
+    // ─────────────────────────────────────────────────────────────
+    function isAdmin() {
+      return request.auth != null &&
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    // ── Users Collection ──
+    match /users/{userId} {
+      // Authenticated users can read their own profile; admins can read all profiles
+      allow read: if request.auth != null && (request.auth.uid == userId || isAdmin());
+      // Only existing admins can create or update user documents/roles
+      allow write: if isAdmin();
+    }
+
+    // ── Feedbacks Collection ──
+    match /feedbacks/{feedbackId} {
+      // Public users can only read approved reviews; Admins can read all reviews
+      allow read: if resource.data.status == 'approved' || isAdmin();
+
+      // Public users can submit new feedback strictly with 'pending' status & valid fields
+      allow create: if request.resource.data.status == 'pending'
+                    && request.resource.data.name is string
+                    && request.resource.data.name.size() > 0
+                    && request.resource.data.rating is number
+                    && request.resource.data.rating >= 1
+                    && request.resource.data.rating <= 5;
+
+      // Only verified administrators can approve, reject, or delete feedback
+      allow update, delete: if isAdmin();
+    }
+  }
+}
