@@ -21,8 +21,8 @@ import {
 } from '../services/reviewService'
 import { OWNER_WHATSAPP_NUMBER } from '../config'
 import { useTheme } from '../context/ThemeContext'
-import brandLogo from '../assets/logo.png'
-import adminLoginBg from '../assets/admin_login_bg.jpg'
+import brandLogo from '../assets/logo.webp'
+import adminLoginBg from '../assets/admin_login_bg.webp'
 
 type FilterStatus = 'all' | 'pending' | 'approved' | 'rejected'
 type ViewMode = 'cards' | 'table'

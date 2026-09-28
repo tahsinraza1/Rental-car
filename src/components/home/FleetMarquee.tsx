@@ -24,7 +24,15 @@ export function FleetMarquee() {
           {items.map((car, i) => (
             <div key={`${car.id}-${i}`} className="w-56 shrink-0 overflow-hidden rounded-2xl border border-black/10 bg-white">
               <div className="relative h-32 overflow-hidden">
-                <img src={car.images[0]} alt={car.name} className="h-full w-full object-cover" loading="lazy" />
+                <img
+                  src={car.images[0]}
+                  alt={car.name}
+                  className="h-full w-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                  width={224}
+                  height={128}
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/30 to-transparent" />
                 <div className="absolute bottom-2.5 left-3 right-3">
                   <div className="text-xs sm:text-[13px] font-bold text-white tracking-wide truncate drop-shadow-md">{car.name}</div>

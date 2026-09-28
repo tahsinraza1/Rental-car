@@ -252,8 +252,11 @@ export function FeaturedCarsSection() {
                 <img
                   src={car.images[0]}
                   alt={car.name}
-                  className="featured-img-subtle-scale h-full w-full object-cover object-center"
                   loading="lazy"
+                  decoding="async"
+                  width={400}
+                  height={250}
+                  className="featured-img-subtle-scale h-full w-full object-cover object-center"
                 />
                 <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-slate-950/70 via-slate-950/20 to-transparent" />
 

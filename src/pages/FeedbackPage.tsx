@@ -5,14 +5,14 @@ import { VehicleCombobox } from '../components/ui/VehicleCombobox'
 import { BookingMethodSelect } from '../components/ui/BookingMethodSelect'
 import { SortSelect, type SortOptionId } from '../components/ui/SortSelect'
 
-import cretaImg from '../assets/cars/creta.jpg'
+import cretaImg from '../assets/cars/creta.webp'
 import glanzaImg from '../assets/cars/glanza.webp'
-import safariImg from '../assets/cars/safari.jpg'
-import scorpioNImg from '../assets/cars/scorpio-n.jpg'
-import tharImg from '../assets/cars/thar.jpg'
-import balenoImg from '../assets/cars/baleno.jpg'
-import punchImg from '../assets/cars/punch.jpg'
-import heroBg from '../assets/contact-hero-bg.png'
+import safariImg from '../assets/cars/safari.webp'
+import scorpioNImg from '../assets/cars/scorpio-n.webp'
+import tharImg from '../assets/cars/thar.webp'
+import balenoImg from '../assets/cars/baleno.webp'
+import punchImg from '../assets/cars/punch.webp'
+import heroBg from '../assets/contact-hero-bg.webp'
 
 interface CuratedReview extends CustomerReview {
   carImg?: string

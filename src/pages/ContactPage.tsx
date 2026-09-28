@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import { OWNER_PHONE_E164, OWNER_WHATSAPP_NUMBER } from '../config'
 import { cars } from '../data/cars'
 import type { Car } from '../types'
-import contactHeroBg from '../assets/contact-hero-bg.png'
+import contactHeroBg from '../assets/contact-hero-bg.webp'
 
 export function ContactPage() {
   const [name, setName] = useState('')

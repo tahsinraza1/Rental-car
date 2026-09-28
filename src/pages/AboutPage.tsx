@@ -3,9 +3,9 @@ import { OWNER_WHATSAPP_NUMBER } from '../config'
 import { BehindYourSafeRide } from '../components/home/BehindYourSafeRide'
 
 // Assets
-import heroLuxuryBmw from '../assets/hero_luxury_bmw.jpg'
-import roadTripImg from '../assets/occasions/road_trip.jpg'
-import faizanImg from '../assets/owners/image 1.jpeg'
+import heroLuxuryBmw from '../assets/hero_luxury_bmw.webp'
+import roadTripImg from '../assets/occasions/road_trip.webp'
+import faizanImg from '../assets/owners/image 1.webp'
 
 // ── 6 CORE PILLARS OF EXCELLENCE ──
 const CORE_PILLARS = [

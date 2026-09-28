@@ -50,11 +50,11 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-/* Smooth Global Theme Transitions */
-body, #root, header, nav, main, section, footer, div, table, thead, tbody, tr, td, th {
-  transition-property: background-color, border-color, color, fill, stroke;
-  transition-duration: 350ms;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+/* Smooth Theme Transitions on Root Containers only (prevents non-composited main-thread re-layouts) */
+body, header, nav, footer {
+  transition: background-color 300ms cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 300ms cubic-bezier(0.4, 0, 0.2, 1),
+              color 300ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Scrollbar */
@@ -118,10 +118,11 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Fleet marquee */
 @keyframes marquee {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0%   { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-50%, 0, 0); }
 }
 .marquee-track {
+  will-change: transform;
   animation: marquee 30s linear infinite;
   width: max-content;
 }
@@ -130,10 +131,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translate3d(0, 16px, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
 }
 .animate-fade-in-up {
+  will-change: transform, opacity;
   animation: fadeInUp 0.55s ease forwards;
 }
 
@@ -306,14 +308,15 @@ h1, h2, h3, h4, h5, h6 {
 /* Center Card Highlight for Behind Your Safe Ride */
 @keyframes centerBouncyFloat {
   0%, 100% {
-    transform: translateY(0px);
+    transform: translate3d(0, 0px, 0);
   }
   50% {
-    transform: translateY(-8px);
+    transform: translate3d(0, -8px, 0);
   }
 }
 
 .center-card-bouncy {
+  will-change: transform;
   animation: centerBouncyFloat 3.5s ease-in-out infinite;
   box-shadow: 
     0 25px 60px -12px rgba(249, 115, 22, 0.32),
@@ -339,48 +342,55 @@ h1, h2, h3, h4, h5, h6 {
 
 @keyframes subtleImageBreath {
   0%, 100% {
-    transform: scale(1.04);
+    transform: scale(1.04) translateZ(0);
   }
   50% {
-    transform: scale(1.08);
+    transform: scale(1.08) translateZ(0);
   }
 }
 
 .animate-subtle-zoom {
+  will-change: transform;
   animation: subtleImageBreath 6s ease-in-out infinite;
 }
 
-/* Continuous Full-Page Vertical Floating Animation for WhatsApp across entire viewport */
+/* Continuous Full-Page Vertical Floating Animation for WhatsApp across entire viewport (GPU Composited) */
 @keyframes whatsappVerticalFloat {
   0% {
-    transform: translateY(0px) rotate(0deg);
-    box-shadow: 0 10px 25px -4px rgba(37, 211, 102, 0.45);
+    transform: translate3d(0, 0px, 0) rotate(0deg);
   }
   25% {
-    transform: translateY(calc(-40vh + 45px)) rotate(3deg);
-    box-shadow: 0 22px 40px -6px rgba(37, 211, 102, 0.6);
+    transform: translate3d(0, calc(-40vh + 45px), 0) rotate(3deg);
   }
   50% {
-    transform: translateY(calc(-78vh + 80px)) rotate(-3deg);
-    box-shadow: 0 32px 55px -8px rgba(37, 211, 102, 0.7);
+    transform: translate3d(0, calc(-78vh + 80px), 0) rotate(-3deg);
   }
   75% {
-    transform: translateY(calc(-38vh + 40px)) rotate(2deg);
-    box-shadow: 0 22px 40px -6px rgba(37, 211, 102, 0.6);
+    transform: translate3d(0, calc(-38vh + 40px), 0) rotate(2deg);
   }
   100% {
-    transform: translateY(0px) rotate(0deg);
-    box-shadow: 0 10px 25px -4px rgba(37, 211, 102, 0.45);
+    transform: translate3d(0, 0px, 0) rotate(0deg);
   }
 }
 
 .animate-whatsapp-float-vertical {
+  will-change: transform;
   animation: whatsappVerticalFloat 8.5s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
 }
 
 .animate-whatsapp-float-vertical:hover,
 .animate-whatsapp-float-vertical:focus-within {
   animation-play-state: paused;
+}
+
+/* Accessibility: Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* ─────────────────────────────────────────────────────────────

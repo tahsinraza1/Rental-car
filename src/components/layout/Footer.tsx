@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { OWNER_PHONE_E164, OWNER_WHATSAPP_NUMBER } from '../../config'
-import logoImg from '../../assets/logo.png'
+import logoImg from '../../assets/logo.webp'
 
 export function Footer() {
   return (
@@ -9,8 +9,8 @@ export function Footer() {
         <div className="grid gap-12 md:grid-cols-3">
 
           <div>
-            <Link to="/" className="flex items-center gap-2">
-              <img src={logoImg} alt="Car Rental Express" className="h-9 w-auto" />
+            <Link to="/" className="inline-flex items-center overflow-hidden rounded-xl border border-sky-400/30 bg-[#1e6cb7] p-0.5 shadow-sm transition-transform duration-300 hover:scale-105">
+              <img src={logoImg} alt="Car Rental Express" className="h-8 w-auto rounded-lg object-contain" />
             </Link>
             <p className="mt-5 max-w-xs text-sm leading-relaxed text-slate-400">
               Rent well-kept self-drive cars with unlimited kilometers. Clean cars, easy paperwork, instant WhatsApp booking.

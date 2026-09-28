@@ -9,7 +9,7 @@ import { FeedbackSection } from '../components/home/FeedbackSection'
 import { BehindYourSafeRide } from '../components/home/BehindYourSafeRide'
 import { FeaturedCarsSection } from '../components/home/FeaturedCarsSection'
 
-import featuredWaveBg from '../assets/featured-wave-bg.png'
+import featuredWaveBg from '../assets/featured-wave-bg.webp'
 
 export function HomePage() {
   return (

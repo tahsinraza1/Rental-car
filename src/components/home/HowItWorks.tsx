@@ -1,9 +1,9 @@
-import howItWorksBg from '../../assets/steps/how_it_works_bg.jpg'
-import step1Img from '../../assets/steps/step1_browse.jpg'
-import step2Img from '../../assets/steps/step2_availability.jpg'
-import step3Img from '../../assets/steps/step3_payment.jpg'
-import step4Img from '../../assets/steps/step4_drive.jpg'
-import featuredWaveBg from '../../assets/featured-wave-bg.png'
+import howItWorksBg from '../../assets/steps/how_it_works_bg.webp'
+import step1Img from '../../assets/steps/step1_browse.webp'
+import step2Img from '../../assets/steps/step2_availability.webp'
+import step3Img from '../../assets/steps/step3_payment.webp'
+import step4Img from '../../assets/steps/step4_drive.webp'
+import featuredWaveBg from '../../assets/featured-wave-bg.webp'
 
 interface StepCard {
   step: string
@@ -129,6 +129,8 @@ export function HowItWorks() {
         <img
           src={howItWorksBg}
           alt="Scenic Coastal Highway Background"
+          loading="lazy"
+          decoding="async"
           className="absolute inset-0 h-full w-full object-cover object-[center_35%]"
         />
 
@@ -169,6 +171,8 @@ export function HowItWorks() {
                 <img
                   src={s.image}
                   alt={s.title}
+                  loading="lazy"
+                  decoding="async"
                   className="h-full w-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
                 />
               </div>

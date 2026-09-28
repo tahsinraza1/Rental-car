@@ -1,15 +1,15 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import selfDriveImg from '../../assets/occasions/self_drive.jpg'
-import hourlyRentalImg from '../../assets/occasions/hourly_rental.jpg'
-import weddingImg from '../../assets/occasions/wedding.jpg'
-import airportTransferImg from '../../assets/occasions/airport_transfer.jpg'
-import roadTripImg from '../../assets/occasions/road_trip.jpg'
-import eventsImg from '../../assets/occasions/events.jpg'
-import luxuryImg from '../../assets/occasions/luxury.jpg'
-import groupTravelImg from '../../assets/occasions/group_travel.jpg'
-import featuredWaveBg from '../../assets/featured-wave-bg.png'
+import selfDriveImg from '../../assets/occasions/self_drive.webp'
+import hourlyRentalImg from '../../assets/occasions/hourly_rental.webp'
+import weddingImg from '../../assets/occasions/wedding.webp'
+import airportTransferImg from '../../assets/occasions/airport_transfer.webp'
+import roadTripImg from '../../assets/occasions/road_trip.webp'
+import eventsImg from '../../assets/occasions/events.webp'
+import luxuryImg from '../../assets/occasions/luxury.webp'
+import groupTravelImg from '../../assets/occasions/group_travel.webp'
+import featuredWaveBg from '../../assets/featured-wave-bg.webp'
 
 type FilterCategory = 'all' | 'self-drive' | 'hourly' | 'wedding' | 'airport' | 'road-trip' | 'events' | 'luxury' | 'group'
 
@@ -226,6 +226,7 @@ export function UseCasesSection() {
               alt={c.title}
               className={`h-full w-full object-cover ${c.imgPosition || 'object-center'} transition-transform duration-700 ease-out group-hover:scale-110`}
               loading="lazy"
+              decoding="async"
             />
 
             {/* Atmospheric Gradient Scrim */}

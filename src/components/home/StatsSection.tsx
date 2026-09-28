@@ -1,4 +1,4 @@
-import statsHighwayBg from '../../assets/stats-highway-bg.jpg'
+import statsHighwayBg from '../../assets/stats-highway-bg.webp'
 
 export function StatsSection() {
   const stats = [
@@ -49,6 +49,8 @@ export function StatsSection() {
       <img
         src={statsHighwayBg}
         alt="Highway City Sunset"
+        loading="lazy"
+        decoding="async"
         className="absolute inset-0 h-full w-full object-cover object-right md:object-center brightness-105 contrast-105 opacity-90"
       />
 

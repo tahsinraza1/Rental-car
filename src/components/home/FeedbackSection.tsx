@@ -1,14 +1,16 @@
 import { useState, useEffect, useMemo } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { subscribeToReviews, type CustomerReview } from '../../services/reviewService'
-import { ReviewModal } from './ReviewModal'
+import { lazy, Suspense } from 'react'
+import type { CustomerReview } from '../../services/reviewService'
 
-import feedbackScenicBg from '../../assets/feedback-scenic-bg.jpg'
-import cretaImg from '../../assets/cars/creta.jpg'
+const ReviewModal = lazy(() => import('./ReviewModal').then(m => ({ default: m.ReviewModal })))
+
+import feedbackScenicBg from '../../assets/feedback-scenic-bg.webp'
+import cretaImg from '../../assets/cars/creta.webp'
 import glanzaImg from '../../assets/cars/glanza.webp'
-import safariImg from '../../assets/cars/safari.jpg'
-import scorpioNImg from '../../assets/cars/scorpio-n.jpg'
-import tharImg from '../../assets/cars/thar.jpg'
+import safariImg from '../../assets/cars/safari.webp'
+import scorpioNImg from '../../assets/cars/scorpio-n.webp'
+import tharImg from '../../assets/cars/thar.webp'
 
 interface CuratedReview extends CustomerReview {
   carImg?: string
@@ -125,12 +127,29 @@ export function FeedbackSection() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [startIndex, setStartIndex] = useState(0)
 
-  // Subscribe to real-time reviews from Firebase Firestore
+  // Subscribe to real-time reviews from Firebase Firestore (deferred after initial page load)
   useEffect(() => {
-    const unsubscribe = subscribeToReviews((firestoreReviews) => {
-      setLiveReviews(firestoreReviews)
-    })
-    return () => unsubscribe()
+    let unsubscribe: (() => void) | undefined
+    let isCancelled = false
+
+    const timer = setTimeout(async () => {
+      try {
+        const { subscribeToReviews } = await import('../../services/reviewService')
+        if (!isCancelled) {
+          unsubscribe = subscribeToReviews((firestoreReviews) => {
+            setLiveReviews(firestoreReviews)
+          })
+        }
+      } catch (err) {
+        console.error('Failed to load reviewService:', err)
+      }
+    }, 2000)
+
+    return () => {
+      isCancelled = true
+      clearTimeout(timer)
+      if (unsubscribe) unsubscribe()
+    }
   }, [])
 
   // Combine live reviews with curated fallback reviews and limit to latest 5 for Home Page
@@ -169,6 +188,8 @@ export function FeedbackSection() {
       <img
         src={feedbackScenicBg}
         alt="Scenic Highway Mountain Backdrop"
+        loading="lazy"
+        decoding="async"
         className="pointer-events-none absolute inset-0 h-full w-full object-cover object-[center_35%]"
       />
 
@@ -440,10 +461,14 @@ export function FeedbackSection() {
       </div>
 
       {/* Review Modal */}
-      <ReviewModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      />
+      {isModalOpen && (
+        <Suspense fallback={null}>
+          <ReviewModal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+          />
+        </Suspense>
+      )}
     </section>
   )
 }

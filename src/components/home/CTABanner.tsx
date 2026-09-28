@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { OWNER_WHATSAPP_NUMBER } from '../../config'
-import ctaBannerBg from '../../assets/cta-banner-bg.png'
+import ctaBannerBg from '../../assets/cta-banner-bg.webp'
 
 export function CTABanner() {
   const navigate = useNavigate()
@@ -11,6 +11,8 @@ export function CTABanner() {
       <img
         src={ctaBannerBg}
         alt="Ready to Experience Background"
+        loading="lazy"
+        decoding="async"
         className="pointer-events-none absolute inset-0 h-full w-full object-cover object-[center_right] opacity-100 transition-transform duration-1000 ease-out hover:scale-103"
       />
 

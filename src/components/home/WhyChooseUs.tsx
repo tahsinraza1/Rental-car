@@ -1,4 +1,4 @@
-import featuredWaveBg from '../../assets/featured-wave-bg.png'
+import featuredWaveBg from '../../assets/featured-wave-bg.webp'
 
 interface AdvantageFeature {
   title: string

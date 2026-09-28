@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { OWNER_WHATSAPP_NUMBER } from '../../config'
-import heroImg from '../../assets/hero_night_audi.jpg'
-import heroTharScorpioImg from '../../assets/hero_thar_scorpio.jpg'
-import heroWhiteTharImg from '../../assets/hero_white_thar.jpg'
+import heroImg from '../../assets/hero_night_audi.webp'
+import heroTharScorpioImg from '../../assets/hero_thar_scorpio.webp'
+import heroWhiteTharImg from '../../assets/hero_white_thar.webp'
+import heroLuxuryBmwImg from '../../assets/hero_luxury_bmw.webp'
 
 const heroSlides = [
   {
@@ -40,7 +41,7 @@ const heroSlides = [
     imgPosition: 'object-[80%_center] sm:object-[75%_center] lg:object-[82%_center] xl:object-right',
   },
   {
-    image: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=1920&q=90',
+    image: heroLuxuryBmwImg,
     tag: '⚡ Delhi & Noida Fast Booking',
     title: 'Your Journey,',
     highlight: 'Your Terms.',
@@ -84,6 +85,9 @@ export function ScenicHero() {
             key={i}
             src={s.image}
             alt="Car Rental Express Fleet"
+            loading={i === 0 ? 'eager' : 'lazy'}
+            fetchPriority={i === 0 ? 'high' : 'low'}
+            decoding={i === 0 ? 'sync' : 'async'}
             className={`absolute inset-0 h-full w-full object-cover ${s.imgPosition} brightness-105 contrast-105 transition-all duration-1000 ${
               i === active ? 'opacity-100 scale-100' : 'opacity-0 scale-102 pointer-events-none'
             }`}

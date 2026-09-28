@@ -35,8 +35,11 @@ export function CarCard({
           <img
             src={car.images[0]}
             alt={car.name}
-            className="h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.09]"
             loading="lazy"
+            decoding="async"
+            width={400}
+            height={250}
+            className="h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.09]"
           />
           <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-slate-950/70 via-slate-950/20 to-transparent" />
 

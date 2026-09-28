@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
-// ── ALL 9 OWNER PHOTOS ──
-import owner1Img from '../../assets/owners/image 1.jpeg'
-import owner2Img from '../../assets/owners/image 2.jpeg'
-import owner3Img from '../../assets/owners/image 3.jpeg'
-import owner4Img from '../../assets/owners/image 4.jpeg'
-import owner5Img from '../../assets/owners/image 5.jpeg'
-import owner6Img from '../../assets/owners/image 6.jpeg'
-import owner7Img from '../../assets/owners/image 7.jpeg'
-import owner8Img from '../../assets/owners/image 8.jpeg'
-import owner9Img from '../../assets/owners/image 9.jpeg'
+// ── ALL 9 OWNER PHOTOS (OPTIMIZED WEBP) ──
+import owner1Img from '../../assets/owners/image 1.webp'
+import owner2Img from '../../assets/owners/image 2.webp'
+import owner3Img from '../../assets/owners/image 3.webp'
+import owner4Img from '../../assets/owners/image 4.webp'
+import owner5Img from '../../assets/owners/image 5.webp'
+import owner6Img from '../../assets/owners/image 6.webp'
+import owner7Img from '../../assets/owners/image 7.webp'
+import owner8Img from '../../assets/owners/image 8.webp'
+import owner9Img from '../../assets/owners/image 9.webp'
 
 export interface FleetOwner {
   id: string
@@ -345,6 +345,7 @@ export function BehindYourSafeRide({ showAboutButton = true }: BehindYourSafeRid
                   transform: `translateX(${xPercent}%) scale(${scale}) translateZ(${zTranslate}px) rotateY(${yRotate}deg)`,
                   opacity,
                   zIndex,
+                  willChange: 'transform, opacity',
                   transition: 'transform 450ms cubic-bezier(0.23, 1, 0.32, 1), opacity 450ms ease, box-shadow 450ms ease, border-color 450ms ease',
                 }}
                 className={`absolute w-[84vw] max-w-[320px] sm:max-w-[360px] md:max-w-[390px] aspect-[4/5] overflow-hidden rounded-3xl border bg-slate-950 shadow-xl cursor-pointer ${
@@ -357,6 +358,10 @@ export function BehindYourSafeRide({ showAboutButton = true }: BehindYourSafeRid
                 <img
                   src={owner.image}
                   alt={owner.name || `Owner Photo ${idx + 1}`}
+                  loading="lazy"
+                  decoding="async"
+                  width={390}
+                  height={488}
                   className={`h-full w-full object-cover object-center transition-transform duration-700 ease-out ${
                     isCenter ? 'scale-105' : 'scale-100'
                   }`}

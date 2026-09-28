@@ -3,7 +3,7 @@ import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom'
 import { OWNER_PHONE_E164, OWNER_WHATSAPP_NUMBER } from '../../config'
 import { useTheme } from '../../context/ThemeContext'
 import { cn } from '../../lib/cn'
-import logoImg from '../../assets/logo.png'
+import logoImg from '../../assets/logo.webp'
 
 export function Navbar() {
   const [open, setOpen] = useState(false)
@@ -26,6 +26,18 @@ export function Navbar() {
     setOpen(false)
   }, [location.pathname])
 
+  // Lock background body scroll when mobile drawer is open
+  useEffect(() => {
+    if (open) {
+      const originalOverflow = document.body.style.overflow
+      document.body.style.overflow = 'hidden'
+
+      return () => {
+        document.body.style.overflow = originalOverflow
+      }
+    }
+  }, [open])
+
   return (
     <header className="sticky top-0 z-50 w-full py-2.5 sm:py-3 px-3 sm:px-6 md:px-8 lg:px-12 transition-all duration-300">
       {/* ── ULTRA-STYLISH FLOATING GLASS CAPSULE ── */}
@@ -44,14 +56,14 @@ export function Navbar() {
         <div className="pointer-events-none absolute -inset-0.5 rounded-full bg-gradient-to-r from-orange-500/10 via-amber-500/5 to-rose-500/10 blur-xl opacity-60 dark:opacity-30 -z-10" />
 
         {/* ── 1. LOGO WITH LIVE STATUS TAG ── */}
-        <Link to="/" className="group flex items-center gap-3 shrink-0 relative">
-          <div className="relative flex items-center">
+        <Link to="/" className="group flex items-center gap-2.5 sm:gap-3 shrink-0 relative">
+          <div className="relative flex items-center overflow-hidden rounded-xl sm:rounded-2xl border border-sky-400/40 dark:border-sky-500/30 bg-[#1e6cb7] shadow-sm shadow-sky-900/20 p-0.5 sm:p-1 transition-all duration-300 group-hover:scale-105 group-hover:shadow-md group-hover:shadow-sky-500/30 group-hover:border-sky-400">
             {/* Ambient logo glow on hover */}
-            <div className="pointer-events-none absolute -inset-1.5 rounded-full bg-gradient-to-r from-orange-500/30 to-amber-500/30 blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="pointer-events-none absolute -inset-1 rounded-full bg-gradient-to-r from-orange-500/20 to-amber-500/20 blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             <img
               src={logoImg}
               alt="Car Rental Express"
-              className="h-8.5 sm:h-9.5 w-auto transition-transform duration-300 group-hover:scale-105 relative z-10 drop-shadow-xs"
+              className="h-7.5 sm:h-8.5 w-auto rounded-lg object-contain relative z-10 drop-shadow-xs transition-transform duration-300"
             />
           </div>
 
@@ -209,8 +221,20 @@ export function Navbar() {
 
       {/* ── 5. MOBILE EXPANDABLE DRAWER ── */}
       {open && (
-        <div className="mt-2.5 overflow-hidden rounded-[2rem] border border-orange-200/90 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 p-5 shadow-2xl backdrop-blur-2xl md:hidden animate-fade-in-up">
-          <nav className="grid gap-2">
+        <>
+          {/* Backdrop overlay to prevent clicking or scrolling underlying page */}
+          <div
+            onClick={() => setOpen(false)}
+            onTouchMove={(e) => e.preventDefault()}
+            className="fixed inset-0 top-0 z-40 bg-slate-950/60 backdrop-blur-xs md:hidden"
+            aria-hidden="true"
+          />
+
+          <div
+            onTouchMove={(e) => e.stopPropagation()}
+            className="relative z-50 mt-2.5 max-h-[calc(100dvh-5.5rem)] overflow-y-auto overscroll-contain rounded-[2rem] border border-orange-200/90 dark:border-slate-800 bg-white/98 dark:bg-slate-900/98 p-5 shadow-2xl backdrop-blur-2xl md:hidden animate-fade-in-up"
+          >
+            <nav className="grid gap-2">
             <MobileNavItem to="/" icon="🏠" onClick={() => setOpen(false)}>Home</MobileNavItem>
             <MobileNavItem to="/cars" icon="🚗" badge="14+ Fleet" onClick={() => setOpen(false)}>Browse Cars</MobileNavItem>
             <MobileNavItem to="/feedback" icon="⭐" badge="4.9 ★" onClick={() => setOpen(false)}>Customer Reviews</MobileNavItem>
@@ -256,7 +280,8 @@ export function Navbar() {
             </a>
           </div>
         </div>
-      )}
+      </>
+    )}
     </header>
   )
 }
