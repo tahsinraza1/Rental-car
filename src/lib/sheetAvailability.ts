@@ -91,9 +91,38 @@ export function lookupSheetName(carId: string, carName: string, rows: SheetRow[]
   return sheetCar && sheetCar.length > 0 ? sheetCar : undefined
 }
 
+let memoryCachedRows: SheetRow[] | null = null
+let lastFetchTime = 0
+const CACHE_TTL_MS = 45000 // 45 seconds cache
+let ongoingPromise: Promise<SheetRow[]> | null = null
+
+async function fetchSheetData(): Promise<SheetRow[]> {
+  const now = Date.now()
+  if (memoryCachedRows && now - lastFetchTime < CACHE_TTL_MS) {
+    return memoryCachedRows
+  }
+  if (ongoingPromise) {
+    return ongoingPromise
+  }
+  ongoingPromise = (async () => {
+    try {
+      const response = await fetch(SHEET_API_URL)
+      if (!response.ok) throw new Error('Unable to fetch sheet data')
+      const data = (await response.json()) as SheetRow[]
+      const cleanData = Array.isArray(data) ? data : []
+      memoryCachedRows = cleanData
+      lastFetchTime = Date.now()
+      return cleanData
+    } finally {
+      ongoingPromise = null
+    }
+  })()
+  return ongoingPromise
+}
+
 export function useSheetAvailability(pollIntervalMs = 30000) {
-  const [rows, setRows] = useState<SheetRow[]>([])
-  const [loading, setLoading] = useState(true)
+  const [rows, setRows] = useState<SheetRow[]>(() => memoryCachedRows || [])
+  const [loading, setLoading] = useState<boolean>(() => !memoryCachedRows)
   const [error, setError] = useState(false)
 
   useEffect(() => {
@@ -101,13 +130,11 @@ export function useSheetAvailability(pollIntervalMs = 30000) {
 
     async function load() {
       try {
-        const response = await fetch(SHEET_API_URL)
-        if (!response.ok) throw new Error('Unable to fetch sheet data')
-        const data = (await response.json()) as SheetRow[]
+        const data = await fetchSheetData()
         if (!active) return
-        setRows(Array.isArray(data) ? data : [])
+        setRows(data)
         setError(false)
-      } catch (err) {
+      } catch {
         if (!active) return
         setError(true)
       } finally {

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { OWNER_WHATSAPP_NUMBER } from '../../config'
+import { preloadPage } from '../../lib/routePreloader'
 import heroImg from '../../assets/hero_night_audi.webp'
 import heroTharScorpioImg from '../../assets/hero_thar_scorpio.webp'
 import heroWhiteTharImg from '../../assets/hero_white_thar.webp'
@@ -224,6 +225,8 @@ export function ScenicHero() {
           <div className="flex flex-wrap items-center gap-3.5">
             <button
               onClick={() => navigate('/cars')}
+              onMouseEnter={() => preloadPage('cars')}
+              onTouchStart={() => preloadPage('cars')}
               className="inline-flex items-center justify-center gap-2.5 rounded-2xl bg-gradient-to-r from-orange-500 via-amber-500 to-rose-500 px-7 py-3.5 text-sm font-bold text-white shadow-xl shadow-orange-500/25 transition duration-300 hover:brightness-110 active:scale-95 cursor-pointer"
             >
               <svg className="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>

@@ -3,6 +3,7 @@ import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { AppLayout } from './components/layout/AppLayout'
 import { FloatingWhatsApp } from './components/common/FloatingWhatsApp'
 import { HomePage } from './pages/HomePage'
+import { preloadAllRoutes } from './lib/routePreloader'
 
 // Lazy loaded page components for optimal initial bundle & fast mobile FCP/LCP
 const AboutPage = lazy(() => import('./pages/AboutPage').then((m) => ({ default: m.AboutPage })))
@@ -34,6 +35,14 @@ function ScrollToTop() {
 }
 
 export default function App() {
+  useEffect(() => {
+    // Schedule route preloading during browser idle period
+    const timer = setTimeout(() => {
+      preloadAllRoutes()
+    }, 1000)
+    return () => clearTimeout(timer)
+  }, [])
+
   return (
     <>
       <ScrollToTop />

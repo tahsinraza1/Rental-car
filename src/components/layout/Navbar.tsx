@@ -4,6 +4,7 @@ import { OWNER_PHONE_E164, OWNER_WHATSAPP_NUMBER } from '../../config'
 import { useTheme } from '../../context/ThemeContext'
 import { cn } from '../../lib/cn'
 import logoImg from '../../assets/logo.webp'
+import { preloadAllRoutes, preloadPage } from '../../lib/routePreloader'
 
 export function Navbar() {
   const [open, setOpen] = useState(false)
@@ -26,9 +27,10 @@ export function Navbar() {
     setOpen(false)
   }, [location.pathname])
 
-  // Lock background body scroll when mobile drawer is open
+  // Lock background body scroll when mobile drawer is open & prefetch all routes
   useEffect(() => {
     if (open) {
+      preloadAllRoutes()
       const originalOverflow = document.body.style.overflow
       document.body.style.overflow = 'hidden'
 
@@ -76,14 +78,14 @@ export function Navbar() {
         {/* ── 2. FLOATING DOCK NAVIGATION LINKS ── */}
         <nav className="hidden items-center gap-1 md:flex rounded-full bg-slate-100/80 dark:bg-slate-800/80 p-1.5 border border-slate-200/80 dark:border-white/10 shadow-inner backdrop-blur-md">
           <NavItem to="/">Home</NavItem>
-          <NavItem to="/cars" badge="14+ Cars" badgeColor="bg-orange-500/15 text-orange-600 dark:text-orange-400 border-orange-400/30">
+          <NavItem to="/cars" pageKey="cars" badge="14+ Cars" badgeColor="bg-orange-500/15 text-orange-600 dark:text-orange-400 border-orange-400/30">
             Browse Cars
           </NavItem>
-          <NavItem to="/feedback" badge="★ 4.9" badgeColor="bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-400/30">
+          <NavItem to="/feedback" pageKey="feedback" badge="★ 4.9" badgeColor="bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-400/30">
             Reviews
           </NavItem>
-          <NavItem to="/about">About Us</NavItem>
-          <NavItem to="/contact" badge="Instant" badgeColor="bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-400/30">
+          <NavItem to="/about" pageKey="about">About Us</NavItem>
+          <NavItem to="/contact" pageKey="contact" badge="Instant" badgeColor="bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-400/30">
             Contact
           </NavItem>
         </nav>
@@ -202,8 +204,13 @@ export function Navbar() {
 
           {/* Animated Hamburger Toggle */}
           <button
-            className="flex size-9 items-center justify-center rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 transition active:scale-90 shadow-2xs"
-            onClick={() => setOpen(!open)}
+            className="flex size-9 items-center justify-center rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 transition active:scale-90 shadow-2xs cursor-pointer"
+            onClick={() => {
+              if (!open) preloadAllRoutes()
+              setOpen(!open)
+            }}
+            onMouseEnter={preloadAllRoutes}
+            onTouchStart={preloadAllRoutes}
             aria-label="Toggle menu"
           >
             {open ? (
@@ -235,12 +242,12 @@ export function Navbar() {
             className="relative z-50 mt-2.5 max-h-[calc(100dvh-5.5rem)] overflow-y-auto overscroll-contain rounded-[2rem] border border-orange-200/90 dark:border-slate-800 bg-white/98 dark:bg-slate-900/98 p-5 shadow-2xl backdrop-blur-2xl md:hidden animate-fade-in-up"
           >
             <nav className="grid gap-2">
-            <MobileNavItem to="/" icon="🏠" onClick={() => setOpen(false)}>Home</MobileNavItem>
-            <MobileNavItem to="/cars" icon="🚗" badge="14+ Fleet" onClick={() => setOpen(false)}>Browse Cars</MobileNavItem>
-            <MobileNavItem to="/feedback" icon="⭐" badge="4.9 ★" onClick={() => setOpen(false)}>Customer Reviews</MobileNavItem>
-            <MobileNavItem to="/about" icon="✨" onClick={() => setOpen(false)}>About Us</MobileNavItem>
-            <MobileNavItem to="/contact" icon="📍" badge="24×7" onClick={() => setOpen(false)}>Contact Us</MobileNavItem>
-          </nav>
+              <MobileNavItem to="/" icon="🏠" onClick={() => setOpen(false)}>Home</MobileNavItem>
+              <MobileNavItem to="/cars" pageKey="cars" icon="🚗" badge="14+ Fleet" onClick={() => setOpen(false)}>Browse Cars</MobileNavItem>
+              <MobileNavItem to="/feedback" pageKey="feedback" icon="⭐" badge="4.9 ★" onClick={() => setOpen(false)}>Customer Reviews</MobileNavItem>
+              <MobileNavItem to="/about" pageKey="about" icon="✨" onClick={() => setOpen(false)}>About Us</MobileNavItem>
+              <MobileNavItem to="/contact" pageKey="contact" icon="📍" badge="24×7" onClick={() => setOpen(false)}>Contact Us</MobileNavItem>
+            </nav>
 
           {/* Quick Theme Mode Toggle in Drawer */}
           <div className="mt-4 pt-3.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between px-2">
@@ -291,15 +298,19 @@ function NavItem({
   children,
   badge,
   badgeColor,
+  pageKey,
 }: {
   to: string
   children: React.ReactNode
   badge?: string
   badgeColor?: string
+  pageKey?: 'cars' | 'about' | 'feedback' | 'contact'
 }) {
   return (
     <NavLink
       to={to}
+      onMouseEnter={() => pageKey && preloadPage(pageKey)}
+      onTouchStart={() => pageKey && preloadPage(pageKey)}
       className={({ isActive }) =>
         cn(
           'relative inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-bold transition-all duration-300',
@@ -336,17 +347,21 @@ function MobileNavItem({
   icon,
   badge,
   onClick,
+  pageKey,
 }: {
   to: string
   children: React.ReactNode
   icon?: string
   badge?: string
   onClick?: () => void
+  pageKey?: 'cars' | 'about' | 'feedback' | 'contact'
 }) {
   return (
     <NavLink
       to={to}
       onClick={onClick}
+      onMouseEnter={() => pageKey && preloadPage(pageKey)}
+      onTouchStart={() => pageKey && preloadPage(pageKey)}
       className={({ isActive }) =>
         cn(
           'flex items-center justify-between rounded-2xl px-4 py-3 text-sm font-bold transition-all',

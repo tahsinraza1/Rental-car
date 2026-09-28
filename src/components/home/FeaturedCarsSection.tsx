@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect, useCallback } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { cars } from '../../data/cars'
 import { lookupAvailability, lookupPrice, lookupSheetName, useSheetAvailability, isCarAvailable } from '../../lib/sheetAvailability'
+import { preloadPage } from '../../lib/routePreloader'
 
 type CategoryType = 'all' | 'muv' | 'suv' | 'sedan' | 'hatchback'
 
@@ -370,6 +371,8 @@ export function FeaturedCarsSection() {
                 <div className="flex items-center justify-between pt-1">
                   <Link
                     to={`/cars/${car.id}`}
+                    onMouseEnter={() => preloadPage('carDetail')}
+                    onTouchStart={() => preloadPage('carDetail')}
                     className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-bold text-white transition-all duration-300 ${
                       isCenter
                         ? 'bg-gradient-to-r from-orange-500 via-amber-500 to-rose-500 shadow-md shadow-orange-500/30 hover:brightness-110 hover:scale-105'
@@ -384,6 +387,8 @@ export function FeaturedCarsSection() {
 
                   <Link
                     to={`/cars/${car.id}`}
+                    onMouseEnter={() => preloadPage('carDetail')}
+                    onTouchStart={() => preloadPage('carDetail')}
                     className="inline-flex items-center gap-1 text-xs font-bold text-slate-600 dark:text-slate-400 transition duration-300 hover:text-orange-600 dark:hover:text-orange-400"
                   >
                     <span>View Details</span>
@@ -419,6 +424,8 @@ export function FeaturedCarsSection() {
 
         <button
           onClick={() => navigate('/cars')}
+          onMouseEnter={() => preloadPage('cars')}
+          onTouchStart={() => preloadPage('cars')}
           className="inline-flex items-center gap-2 rounded-full border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-orange-50 dark:hover:bg-slate-800 hover:border-orange-300 dark:hover:border-orange-500 hover:text-orange-600 dark:hover:text-orange-400 px-6 py-2.5 text-xs font-bold text-slate-700 dark:text-slate-300 shadow-xs transition duration-300 active:scale-95 cursor-pointer"
         >
           <span>View All 14 Cars in Fleet</span>
